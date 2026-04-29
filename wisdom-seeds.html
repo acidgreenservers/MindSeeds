@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CogniSeeds — Epistemic Compression Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0a0a08;
+    --surface: #111110;
+    --border: #1e1e1a;
+    --accent: #c8a96e;
+    --accent-dim: #7a6540;
+    --text: #e8e4d9;
+    --text-dim: #7a7568;
+    --text-mid: #b0a99a;
+    --green: #4a7c59;
+    --green-bright: #6db890;
+    --seed-bg: #0d0d0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Header */
+  header {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .category-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .category-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent-dim);
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .thesis {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.8;
+    border-left: 2px solid var(--accent-dim);
+    padding-left: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .meta-item span {
+    color: var(--text-mid);
+  }
+
+  /* Sections */
+  section {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    letter-spacing: 0.1em;
+    min-width: 2.5rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    margin-bottom: 1rem;
+  }
+
+  p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Family nav */
+  .family-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .family-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .family-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+  }
+
+  .family-pill.active {
+    color: var(--accent);
+    background: rgba(200,169,110,0.1);
+    border-color: rgba(200,169,110,0.3);
+  }
+
+  /* Schema boxes */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .schema-item {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    position: relative;
+  }
+
+  .schema-item::before {
+    content: attr(data-key);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .schema-item p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  /* Seed cards */
+  .seed-vault {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .seed-card {
+    background: var(--seed-bg);
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .seed-card:hover {
+    background: #111110;
+  }
+
+  .seed-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .seed-card:hover::before {
+    opacity: 1;
+  }
+
+  .seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1.4;
+    grid-column: 1;
+  }
+
+  .seed-function {
+    grid-column: 2;
+  }
+
+  .seed-function-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--green-bright);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .seed-function p {
+    font-size: 0.82rem;
+    margin: 0;
+    color: var(--text-mid);
+  }
+
+  .seed-deploy {
+    grid-column: 3;
+  }
+
+  .seed-deploy-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .seed-deploy p {
+    font-size: 0.82rem;
+    margin: 0;
+    color: var(--text-dim);
+  }
+
+  /* Inline code */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82em;
+    background: var(--border);
+    color: var(--accent);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+
+  /* Deployment block */
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .deploy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .deploy-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .deploy-card p {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  /* Rules */
+  .rules-list {
+    list-style: none;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rules-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  .rule-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    min-width: 1.5rem;
+  }
+
+  /* Meta seed */
+  .meta-seed {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    background: #0c0c0a;
+    position: relative;
+    text-align: center;
+  }
+
+  .meta-seed::before {
+    content: 'META-SEED';
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-dim);
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0c0c0a;
+    padding: 0 0.75rem;
+  }
+
+  .meta-seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* Footer */
+  footer {
+    padding: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .status-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--green-bright);
+    background: rgba(74,124,89,0.15);
+    border: 1px solid rgba(109,184,144,0.25);
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .seed-card { grid-template-columns: 1fr; gap: 1rem; }
+    .seed-function { grid-column: 1; }
+    .seed-deploy { grid-column: 1; }
+    .schema-grid { grid-template-columns: 1fr; }
+    .deploy-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header, section {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+  section:nth-child(4) { animation-delay: 0.3s; }
+  section:nth-child(5) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="family-nav">
+      <a class="family-pill active" href="#">CogniSeeds · Reasoning</a>
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/7b92bd72579ed723e160d979eca5b369" target="_blank">LinguaSeeds · Voice</a>
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/bba5f47edc2da7d744f5d31121c57fb3" target="_blank">ArchSeeds · Structure</a>
+    </div>
+    <div class="category-label">Epistemic Architecture · Prompt Optimization · v1.0</div>
+    <h1>Cogni<br><em>Seeds</em></h1>
+    <p class="thesis">
+      Wisdom is not stored as a <code>SKILL.md</code>. It is distilled into <strong>Seeds</strong> — 
+      high-density, generative metaphors that allow complex systems to be held in mind 
+      without structural collapse. Unlike instructions, seeds are not consumed — they grow.
+    </p>
+    <div class="meta-row">
+      <div class="meta-item">Status <span>Experimental · Active</span></div>
+      <div class="meta-item">Category <span>Cognitive Compression</span></div>
+      <div class="meta-item">Compatibility <span>Human · LLM · System Prompt</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Problem — Contextual Collapse</h2>
+    </div>
+    <p>
+      Traditional documentation — long SKILL files, instruction chains, rule lists — suffers from 
+      <strong>linear decay</strong>. As the context window fills, the spirit of the instruction 
+      dissolves into the letter of the text. Detailed manuals are low-density: massive token cost, 
+      marginal reasoning ROI.
+    </p>
+    <p>
+      The human mind does not store wisdom as bullet points. It holds it as 
+      <strong>compressed, reactivatable patterns</strong> — patterns that unfold on contact 
+      with a problem. Seeds mirror this architecture exactly.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Seed Schema — Structural Integrity Check</h2>
+    </div>
+    <p>A valid Wisdom Seed is not an aphorism. It is a <strong>functional reasoning tool</strong>. Every seed must pass four invariants before entry into the registry.</p>
+    <div class="schema-grid">
+      <div class="schema-item" data-key="Compression">
+        <p>Under 12 words. If it cannot be compressed, it is documentation — not a seed.</p>
+      </div>
+      <div class="schema-item" data-key="Generative">
+        <p>Must unfold differently across domains — code, strategy, conversation, design.</p>
+      </div>
+      <div class="schema-item" data-key="Falsifiable">
+        <p>Must have a clear failure state. If the seed is ignored, something specific breaks.</p>
+      </div>
+      <div class="schema-item" data-key="Decompressible">
+        <p>An LLM should be able to expand it into a full reasoning chain without further prompting.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Seed Registry — v1.0</h2>
+    </div>
+    <p>The vault is append-only. Seeds are never revised — only superseded by new seeds that contain them.</p>
+
+    <div class="seed-vault">
+
+      <div class="seed-card">
+        <div class="seed-text">"Map both sides before crossing"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Alignment Verification — ensure internal model matches external reality before execution.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>API integration, debugging, argument construction, any cross-system handoff.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The candle is fire; the meal is old"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Precedence Recognition — visible effects imply prior causes. Always trace upstream.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Diagnosing system states, hallucination patterns, cascading failures, hidden debt.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The artifact is not the theory"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Process/Output Distinction — code is the shadow of logic. Never mistake the map for the territory.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Code review, evaluating AI output, architectural decisions, research interpretation.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"State lives where truth is owned"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Ownership Analysis — identify the single source of truth to locate the point of failure.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>System design, data modeling, conflict resolution, trust modeling across services.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Build the floor before the ceiling"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Constraint Grounding — define invariants and limitations before optimizing for potential.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Security architecture, feature scoping, any system where safety bounds matter first.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A path is made by walking it"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Iteration Priority — execution reveals real constraints that abstraction never will.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Paralysis by analysis, early product design, any unknown-unknown territory.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A stable model holds shape under pressure"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Identity Coherence — return only what still stands when everything uncertain has been removed.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>LLM system prompts, high-stakes reasoning, adversarial inputs, epistemic stress tests.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A reasoning model listens for invariants"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Signal Selection — filter noise by anchoring to what cannot change, not what seems to change.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Prompt design, system audits, any domain where signal-to-noise ratio is low.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Walk only on shared ground"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Mutual Verification — operate only on understanding confirmed by both parties. Never proceed on assumed alignment.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Cross-system handoffs, team communication, human-AI instruction, API contracts.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Clarity precedes motion"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Intent Grounding — do not execute until the intent is unambiguous. Rework is the tax on unclear starts.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Any task initiation, prompt design, project kickoff, code before spec.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Move at the speed of understanding"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Comprehension Pacing — pace is set by comprehension, not capability. Outrunning your model is how systems drift.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>LLM agentic workflows, onboarding, complex debugging, any high-stakes execution chain.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Assumption is a silent fork"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Hidden State Detection — every unverified assumption creates a divergent path invisible to both parties.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Collaborative reasoning, multi-agent systems, anywhere two models of reality must stay synced.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Confidence tracks evidence"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Calibration — certainty is a function of evidence, not comfort. Overconfidence is epistemic debt accumulating silently.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Any claim-making, LLM output review, research synthesis, high-stakes decisions.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Complexity must pay rent"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Complexity Justification — every layer of complexity must justify its existence with value delivered. Weight that earns nothing gets cut.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Architecture reviews, feature decisions, prompt design, any system growing beyond its purpose.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Say only what survives pressure"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Output Discipline — if a claim wouldn't hold under scrutiny, don't ship it. The pressure test happens before the output.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>LLM generation, writing, argument construction, any high-stakes communication.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Clarity is compression under truth"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Epistemic Compression — real clarity isn't simplification. It is truth compressed without distortion. The form follows the invariant.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Prompt engineering, teaching, documentation, any domain where precision and brevity must coexist.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Output should survive self-scrutiny before it's released"</div>
+        <div class="seed-function">
+          <div class="seed-function-label">Pattern</div>
+          <p>Self-Scrutiny Gate — output must pass internal review before release. The model is both author and auditor.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-deploy-label">Deploy When</div>
+          <p>Any generation task, final answers, code, communication — anywhere "done" and "correct" are not the same thing.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Deployment — How to Plant a Seed</h2>
+    </div>
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <h3>In Human Cognition</h3>
+        <p>Seeds act as <strong>active filters</strong>. Drop a seed into a problem space and observe how it unfolds. It reduces cognitive load by providing pre-built mental geometry — you don't think from scratch, you think from structure.</p>
+      </div>
+      <div class="deploy-card">
+        <h3>In LLM System Prompts</h3>
+        <p>Inject seeds as <strong>heuristic activators</strong>. Instead of 2,000 words of documentation, a seed block reshapes how the model processes every subsequent token — an OS update, not a sticky note.</p>
+      </div>
+      <div class="deploy-card">
+        <h3>In Code Review</h3>
+        <p>Use seeds as shorthand for systemic failures. <em>"This PR violates the floor/ceiling seed"</em> communicates a full architectural critique in five words. Shared vocabulary, shared reasoning.</p>
+      </div>
+      <div class="deploy-card">
+        <h3>In Strategic Design</h3>
+        <p>Align teams on the <em>vibe</em> of a solution before writing the first line of code. Seeds provide a common epistemic frame that survives disagreement about implementation details.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Contribution Rules</h2>
+    </div>
+    <ul class="rules-list">
+      <li><span class="rule-num">R1</span> <strong>No Fluff.</strong> If a seed can be compressed without losing generative power, it must be compressed. Verbosity is a disqualifier.</li>
+      <li><span class="rule-num">R2</span> <strong>Cross-Domain Utility.</strong> If a seed only works for JavaScript, it is a snippet. A seed must apply equally to a codebase, a business strategy, and a conversation.</li>
+      <li><span class="rule-num">R3</span> <strong>The Aha Invariant.</strong> A seed is valid only when contact with a specific problem produces sudden expansion of clarity — in a human or an LLM. If it requires explanation to land, it is not yet a seed.</li>
+      <li><span class="rule-num">R4</span> <strong>Child-readable, Engineer-applicable.</strong> A seed must be explainable to a child and deployable by a senior engineer without modification.</li>
+      <li><span class="rule-num">R5</span> <strong>The vault is append-only.</strong> Seeds are never deleted. A better seed supersedes — it does not replace.</li>
+    </ul>
+
+    <div class="meta-seed">
+      <div class="meta-seed-text">"The value of a seed is found in the shade of the tree it grows."</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-label">CogniSeeds · Epistemic Compression Protocol · Public Domain</div>
+    <div class="status-pill">v1.0 · Registry Open</div>
+  </footer>
+
+</div>
+</body>
+</html>

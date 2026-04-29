@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArchSeeds — Structural Integrity Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #09080d;
+    --surface: #100f15;
+    --border: #1c1a24;
+    --accent: #8b6fd4;
+    --accent-dim: #4a3878;
+    --text: #e4e1ef;
+    --text-dim: #6a6478;
+    --text-mid: #a89ec0;
+    --warm: #c47a4a;
+    --seed-bg: #0b0a10;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+  header {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .category-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent-dim);
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .thesis {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.8;
+    border-left: 2px solid var(--accent-dim);
+    padding-left: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .meta-item span { color: var(--text-mid); }
+
+  section {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    letter-spacing: 0.1em;
+    min-width: 2.5rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    margin-bottom: 1rem;
+  }
+
+  p strong { color: var(--text); font-weight: 500; }
+  p em { color: var(--accent); font-style: italic; }
+
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82em;
+    background: var(--border);
+    color: var(--accent);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+
+  .schema-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .schema-item {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .schema-item::before {
+    content: attr(data-key);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .schema-item p { margin: 0; font-size: 0.875rem; }
+
+  .seed-vault {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .seed-card {
+    background: var(--seed-bg);
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .seed-card:hover { background: #100f15; }
+
+  .seed-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .seed-card:hover::before { opacity: 1; }
+
+  .seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1.4;
+  }
+
+  .seed-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .seed-function .seed-label { color: var(--warm); }
+  .seed-deploy .seed-label { color: var(--text-dim); }
+  .seed-function p, .seed-deploy p { font-size: 0.82rem; margin: 0; }
+  .seed-deploy p { color: var(--text-dim); }
+
+  /* failure mode tag */
+  .failure-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: #e05a5a;
+    background: rgba(224,90,90,0.08);
+    border: 1px solid rgba(224,90,90,0.2);
+    border-radius: 3px;
+    padding: 0.15em 0.5em;
+    margin-top: 0.4rem;
+  }
+
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .deploy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .deploy-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .deploy-card p { font-size: 0.85rem; margin-bottom: 0.5rem; }
+  .deploy-card p:last-child { margin: 0; }
+
+  blockquote {
+    border-left: 2px solid var(--accent-dim);
+    padding-left: 1rem;
+    margin: 0.75rem 0 0;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .rules-list {
+    list-style: none;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rules-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  .rule-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    min-width: 1.5rem;
+  }
+
+  .meta-seed {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    background: #09080d;
+    position: relative;
+    text-align: center;
+  }
+
+  .meta-seed::before {
+    content: 'META-SEED';
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-dim);
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #09080d;
+    padding: 0 0.75rem;
+  }
+
+  .meta-seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .naur-block {
+    margin-top: 2rem;
+    padding: 2rem 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+  }
+
+  .naur-attribution {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    letter-spacing: 0.04em;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .naur-attribution em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .naur-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .naur-q {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .naur-q-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--accent);
+    min-width: 220px;
+  }
+
+  .naur-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+  }
+
+  .naur-a {
+    color: var(--text-mid);
+    font-size: 0.85rem;
+  }
+
+  /* Family nav */
+  .family-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .family-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .family-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+  }
+
+  .family-pill.active {
+    color: var(--accent);
+    background: rgba(139,111,212,0.1);
+    border-color: rgba(139,111,212,0.3);
+  }
+
+  footer {
+    padding: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .status-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    background: rgba(139,111,212,0.1);
+    border: 1px solid rgba(139,111,212,0.25);
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .seed-card { grid-template-columns: 1fr; gap: 1rem; }
+    .schema-grid { grid-template-columns: 1fr; }
+    .deploy-grid { grid-template-columns: 1fr; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header, section { animation: fadeUp 0.6s ease both; }
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+  section:nth-child(4) { animation-delay: 0.3s; }
+  section:nth-child(5) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="family-nav">
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/fa648905c6a0d723fe2061ad80084455" target="_blank">CogniSeeds · Reasoning</a>
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/7b92bd72579ed723e160d979eca5b369" target="_blank">LinguaSeeds · Voice</a>
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/bba5f47edc2da7d744f5d31121c57fb3" target="_blank">ArchSeeds · Structure</a>
+    </div>
+    <div class="category-label">System Architecture · Structural Design · v1.0</div>
+    <h1>Arch<br><em>Seeds</em></h1>
+    <p class="thesis">
+      Systems do not fail because they lack features. They fail because they lack 
+      <strong>Invariants</strong>. ArchSeeds are high-density structural heuristics that 
+      dictate how components interact, fail, and scale — the physics of the design, 
+      ensuring that as complexity increases, entropy remains manageable.
+    </p>
+    <div class="meta-row">
+      <div class="meta-item">Status <span>Operational · Active</span></div>
+      <div class="meta-item">Category <span>System Architecture</span></div>
+      <div class="meta-item">Compatibility <span>Human · LLM · Software · Organization</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Problem — The Complexity Trap</h2>
+    </div>
+    <p>
+      System design falls into the <strong>Abstraction Abyss</strong>. We build "flexible" systems 
+      so decoupled they become incomprehensible, or so rigid they shatter on the first change request.
+    </p>
+    <p>
+      Traditional architecture is documented in static diagrams that go out of date the moment 
+      they are saved. <strong>ArchSeeds are generative</strong> — planted in the design phase to 
+      ensure every subsequent decision respects the core structural logic of the system. 
+      An ArchSeed is not a best practice. It is a <em>hard constraint</em>.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Seed Schema — Structural Integrity Check</h2>
+    </div>
+    <p>Every ArchSeed must be load-bearing. It must hold weight under real system stress.</p>
+    <div class="schema-grid">
+      <div class="schema-item" data-key="Compression">
+        <p>Under 12 words. Must be a load-bearing phrase — no decorative language.</p>
+      </div>
+      <div class="schema-item" data-key="Generative">
+        <p>Must dictate the relationship between at least two components.</p>
+      </div>
+      <div class="schema-item" data-key="Falsifiable">
+        <p>If ignored, the system becomes brittle or leaky. The failure mode is specific.</p>
+      </div>
+      <div class="schema-item" data-key="Decompressible">
+        <p>Must imply the failure it prevents — circular dependency, state drift, silent corruption.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Seed Registry — v1.0</h2>
+    </div>
+    <p>The registry defines the laws of the build. Append-only — no seed is ever removed.</p>
+
+    <div class="seed-vault">
+
+      <div class="seed-card">
+        <div class="seed-text">"Truth has one home, or it is a rumor"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · SSoT</div>
+          <p>Eliminate data duplication and synchronization lag. One authoritative source, no exceptions.</p>
+          <div class="failure-tag">Prevents: State Drift</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Designing databases, state management, or organizational data hierarchies.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The interface is the only reality"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Encapsulation</div>
+          <p>Components must not know how their neighbors work — only what they promise.</p>
+          <div class="failure-tag">Prevents: Tight Coupling</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Defining APIs, microservices, or team responsibility boundaries.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Gravity increases with the size of the state"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · State Minimization</div>
+          <p>The more a system remembers, the harder it is to move or change. State is mass.</p>
+          <div class="failure-tag">Prevents: Complexity Collapse</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Optimizing performance or simplifying complex user flows and session logic.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Failure is a first-class citizen"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Resilience</div>
+          <p>Assume every component will fail. Design the save state for that failure before it happens.</p>
+          <div class="failure-tag">Prevents: Cascading Failure</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Building distributed systems, error handling, or security protocols.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A wall is a bridge with no road"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Decoupling</div>
+          <p>Do not separate components unless you define the communication protocol first. Isolation without interface is just isolation.</p>
+          <div class="failure-tag">Prevents: Orphaned Modules</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Modularizing monoliths or creating plugin architectures.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Latency is the speed of reality"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Constraint Grounding</div>
+          <p>You cannot optimize away physics or network hop limits. Budget for them from day one.</p>
+          <div class="failure-tag">Prevents: Fantasy Architecture</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Performance tuning, UX design, or global infrastructure planning.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Build for the delete key"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Evolvability</div>
+          <p>A system is successful if you can remove a part without the whole dying. Removability is a feature.</p>
+          <div class="failure-tag">Prevents: Irreversible Debt</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Managing technical debt, feature flags, or legacy migrations.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"If you assume it just works, it's already broken"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Assumption Audit</div>
+          <p>Explicit verification over implicit trust. Every silent dependency is a scheduled failure.</p>
+          <div class="failure-tag">Prevents: Silent Assumption Failure</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Integrating third-party services, background jobs, anything "set and forget."</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A change without a witness is just a guess"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Change Verification</div>
+          <p>Every modification requires observed proof of working state. Test, build, verify — before closing the loop.</p>
+          <div class="failure-tag">Prevents: Unwitnessed Regression</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>After any code change, deployment, config update, or dependency bump.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Untested code is only as stable as its worst line"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Test-Driven Integrity</div>
+          <p>Application state is bounded by its least verified component. Tests aren't validation — they're continuous proof of life.</p>
+          <div class="failure-tag">Prevents: Unknown Breakage Surface</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Any development phase — tests built alongside code, not after. Shipping without a suite means shipping unknown state.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A test oracle is the source of truth"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Oracle Grounding</div>
+          <p>The test oracle defines what correct means. Without one, pass/fail is opinion, not fact.</p>
+          <div class="failure-tag">Prevents: Ambiguous Correctness</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Designing test suites, writing assertions, any system where "working" needs a definition before it can be verified.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The system is the sum of its leaks"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Observability</div>
+          <p>If you cannot measure the output, the system does not exist in a known state. Darkness is not stability.</p>
+          <div class="failure-tag">Prevents: Silent Corruption</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Implementing logging, monitoring, alerting, or feedback loops.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Deployment — Planting the Skeleton</h2>
+    </div>
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <h3>In Software Engineering</h3>
+        <p>Instead of a 50-page architecture doc, use a <strong>Seed Block</strong> in the README.</p>
+        <blockquote>"This service operates under the Rumor Seed and the Delete Seed. No local caching of user data; every module must be removable in under 1 hour."</blockquote>
+      </div>
+      <div class="deploy-card">
+        <h3>In Prompt Engineering</h3>
+        <p>Use ArchSeeds to define the world logic for an LLM agent.</p>
+        <blockquote>"Apply the Interface Seed: do not suggest implementation details for the backend — only define the JSON contract."</blockquote>
+      </div>
+      <div class="deploy-card">
+        <h3>In System Audits</h3>
+        <p>Run each seed as a diagnostic question against an existing system.</p>
+        <p><em>"Where does truth live — and is it rumored anywhere else?"</em> One question. Full SSoT audit.</p>
+      </div>
+      <div class="deploy-card">
+        <h3>In Logic and Synthesis</h3>
+        <p>Use the <strong>Gravity Seed</strong> to evaluate any proposed solution. If it requires storing too much state — memory, context, history — the seed flags it as a high-entropy, high-risk path before a line of code is written.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Contribution Rules</h2>
+    </div>
+    <ul class="rules-list">
+      <li><span class="rule-num">R1</span> <strong>Force the Friction.</strong> A seed must make a lazy architecture impossible — not just unlikely.</li>
+      <li><span class="rule-num">R2</span> <strong>Structural, Not Aesthetic.</strong> If the seed describes how something looks rather than how it holds together, it belongs in LinguaSeeds.</li>
+      <li><span class="rule-num">R3</span> <strong>The Seismic Invariant.</strong> If the system is shaken by 10x load or a 50% staff cut, the ArchSeed should be the thing still standing.</li>
+    </ul>
+
+    <div class="meta-seed">
+      <div class="meta-seed-text">"A perfect system is not one where nothing is added, but one where nothing can be removed."</div>
+    </div>
+
+    <div class="naur-block">
+      <div class="naur-attribution">Peter Naur — <em>"the code is just the shadow of the program"</em></div>
+      <div class="naur-questions">
+        <div class="naur-q"><span class="naur-q-text">Where does state live?</span><span class="naur-arrow">→</span><span class="naur-a">who owns the truth</span></div>
+        <div class="naur-q"><span class="naur-q-text">Where does feedback live?</span><span class="naur-arrow">→</span><span class="naur-a">how does the system know itself</span></div>
+        <div class="naur-q"><span class="naur-q-text">What breaks if I delete this?</span><span class="naur-arrow">→</span><span class="naur-a">blast radius awareness</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-label">ArchSeeds · Structural Integrity Protocol · Public Domain</div>
+    <div class="status-pill">v1.0 · Registry Open</div>
+  </footer>
+
+</div>
+</body>
+</html>

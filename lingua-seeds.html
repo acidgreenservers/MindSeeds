@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinguaSeeds — Linguistic Friction Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #080a0a;
+    --surface: #0e1111;
+    --border: #1a1e1e;
+    --accent: #6eb5a0;
+    --accent-dim: #3a6458;
+    --text: #e2e8e6;
+    --text-dim: #687472;
+    --text-mid: #a0aead;
+    --warm: #c47a4a;
+    --warm-dim: #7a4a2a;
+    --seed-bg: #0a0c0c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+  header {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .category-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent-dim);
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .thesis {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.8;
+    border-left: 2px solid var(--accent-dim);
+    padding-left: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .meta-item span { color: var(--text-mid); }
+
+  section {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    letter-spacing: 0.1em;
+    min-width: 2.5rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    margin-bottom: 1rem;
+  }
+
+  p strong { color: var(--text); font-weight: 500; }
+  p em { color: var(--accent); font-style: italic; }
+
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82em;
+    background: var(--border);
+    color: var(--accent);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+
+  /* Family nav */
+  .family-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .family-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .family-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+  }
+
+  .family-pill.active {
+    color: var(--lingua);
+    background: rgba(110,181,160,0.1);
+    border-color: rgba(110,181,160,0.3);
+  }
+
+  .schema-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .schema-item {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .schema-item::before {
+    content: attr(data-key);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .schema-item p { margin: 0; font-size: 0.875rem; }
+
+  /* Seed vault — teal left border on hover */
+  .seed-vault {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .seed-card {
+    background: var(--seed-bg);
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .seed-card:hover { background: #0e1111; }
+
+  .seed-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .seed-card:hover::before { opacity: 1; }
+
+  .seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1.4;
+  }
+
+  .seed-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .seed-function .seed-label { color: var(--warm); }
+  .seed-deploy .seed-label { color: var(--text-dim); }
+
+  .seed-function p,
+  .seed-deploy p { font-size: 0.82rem; margin: 0; }
+  .seed-deploy p { color: var(--text-dim); }
+
+  /* Deploy section */
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .deploy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .deploy-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .deploy-card p { font-size: 0.85rem; margin: 0 0 0.5rem; }
+
+  /* Recursive pass steps */
+  .steps {
+    list-style: none;
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .steps li {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    align-items: baseline;
+  }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent-dim);
+    min-width: 1.2rem;
+  }
+
+  /* Rules */
+  .rules-list {
+    list-style: none;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rules-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  .rule-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-dim);
+    min-width: 1.5rem;
+  }
+
+  /* Meta seed */
+  .meta-seed {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    background: #090b0b;
+    position: relative;
+    text-align: center;
+  }
+
+  .meta-seed::before {
+    content: 'META-SEED';
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-dim);
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #090b0b;
+    padding: 0 0.75rem;
+  }
+
+  .meta-seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  footer {
+    padding: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .status-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    background: rgba(110,181,160,0.1);
+    border: 1px solid rgba(110,181,160,0.25);
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .seed-card { grid-template-columns: 1fr; gap: 1rem; }
+    .schema-grid { grid-template-columns: 1fr; }
+    .deploy-grid { grid-template-columns: 1fr; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header, section { animation: fadeUp 0.6s ease both; }
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+  section:nth-child(4) { animation-delay: 0.3s; }
+  section:nth-child(5) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="family-nav">
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/fa648905c6a0d723fe2061ad80084455" target="_blank">CogniSeeds · Reasoning</a>
+      <a class="family-pill active" href="#">LinguaSeeds · Voice</a>
+      <a class="family-pill" href="https://gist.github.com/acidgreenservers/bba5f47edc2da7d744f5d31121c57fb3" target="_blank">ArchSeeds · Structure</a>
+    </div>
+    <div class="category-label">Linguistic Architecture · Human-Centric Synthesis · v1.0</div>
+    <h1>Lingua<br><em>Seeds</em></h1>
+    <p class="thesis">
+      Authenticity is not a <code>STYLE.css</code>. It is the presence of <strong>Friction</strong> — 
+      the specific, jagged edges of human cognition that LLMs naturally smooth over into 
+      high-entropy slop. These seeds act as de-compressors for sterile text, injecting 
+      the structural inconsistencies that define human presence.
+    </p>
+    <div class="meta-row">
+      <div class="meta-item">Status <span>Operational · Active</span></div>
+      <div class="meta-item">Category <span>Linguistic Architecture</span></div>
+      <div class="meta-item">Compatibility <span>Human · LLM · System Prompt</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Problem — The Uncanny Valley of Syntax</h2>
+    </div>
+    <p>
+      AI-generated text suffers from <strong>Linguistic Entropy</strong>. It prioritizes the 
+      "most likely next token," which results in a frictionless, polite, and ultimately 
+      invisible voice. When every sentence is "pivotal" and "seamless," nothing is.
+    </p>
+    <p>
+      The humanizer task is not about adding slang. It is about restoring the 
+      <strong>resistance of a thinking mind</strong>. Traditional humanizer prompts are 
+      low-density lists of "don't say X." Seeds are generative heuristics that force the 
+      model to simulate the messy process of <em>having an opinion</em>.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Seed Schema — Structural Integrity Check</h2>
+    </div>
+    <p>Every LinguaSeed must pass four invariants to ensure it generates <strong>soul</strong> rather than just synonyms.</p>
+    <div class="schema-grid">
+      <div class="schema-item" data-key="Compression">
+        <p>Under 12 words. High-density heuristic — no room for qualifiers.</p>
+      </div>
+      <div class="schema-item" data-key="Generative">
+        <p>Must force a rewrite of structure, not just word choice.</p>
+      </div>
+      <div class="schema-item" data-key="Falsifiable">
+        <p>If ignored, the text remains AI-smooth. The failure is visible.</p>
+      </div>
+      <div class="schema-item" data-key="Decompressible">
+        <p>Must imply the specific AI-isms to be purged — no ambiguity about what to cut.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Seed Registry — v1.0</h2>
+    </div>
+    <p>Deploy these to collapse AI slop into grounded human prose. The registry is append-only.</p>
+
+    <div class="seed-vault">
+
+      <div class="seed-card">
+        <div class="seed-text">"Only gravity proves weight"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Replace vague importance with concrete data. Weight must be demonstrated, not declared.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Words like "pivotal," "testament," or "underscores" appear.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Vary the stride to prove the walker"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Break the monotonous rhythm of medium-length sentences. Humans don't pace evenly.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Text reads like a predictable metronome or a Wikipedia entry.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Doubt is the signature of a mind"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Acknowledge complexity, uncertainty, and mixed feelings. Certainty is the AI tell.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Output is overly confident, sycophantic, or purely neutral.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Concrete breaks the glass of abstraction"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Swap marketing fluff for specific, functional mechanics. Name the thing.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Words like "vibrant," "seamless," or "unleash" are present.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Remove the grease to find the grip"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Eliminate participles (-ing constructions) and elegant variations. Friction over flow.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Sentences feel slippery — "the application" instead of "the app," passive over active.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"A shadow has no teeth"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Eliminate hedging and weasel words. Claim the position or don't make it.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Text uses "experts believe," "it might," or "potentially."</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The second pass burns the dross"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Recursive critique — identify the AI "tell" before fixing it. Name it, then cut it.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Final polishing pass to remove chatbot artifacts and sycophancy.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Scars prove the skin was there"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern</div>
+          <p>Inject first-person perspective and subjective asides. Evidence of a body behind the words.</p>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Writing feels clean but soulless — technically correct, humanly absent.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Deployment — How to Plant a Seed</h2>
+    </div>
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <h3>In LLM System Prompts</h3>
+        <p>Instead of a list of 200 forbidden words, inject the <strong>Seed Block</strong>.</p>
+        <p><em>"Operate under the Gravity Seed and the Stride Seed. If a sentence feels seamless, break it."</em></p>
+        <p>This forces the model to rethink its internal probability map before a single token is generated.</p>
+      </div>
+      <div class="deploy-card">
+        <h3>In Content Editing</h3>
+        <p>Use seeds as a diagnostic lens. If a paragraph feels off, ask: <em>"Which seed is missing?"</em></p>
+        <p>Missing <strong>Gravity</strong>? Add a hard fact. Missing <strong>Stride</strong>? Cut a sentence in half. Use a fragment.</p>
+      </div>
+      <div class="deploy-card" style="grid-column: 1 / -1;">
+        <h3>The Anti-AI Recursive Pass — Dross Seed</h3>
+        <ul class="steps">
+          <li><span class="step-num">01</span> <strong>Prompt:</strong> "Stare at this text. What makes it obviously AI?"</li>
+          <li><span class="step-num">02</span> <strong>Action:</strong> The model identifies its own tells — "I used the word 'landscape' three times."</li>
+          <li><span class="step-num">03</span> <strong>Prompt:</strong> "Now apply the Grip Seed and excise them."</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Contribution Rules</h2>
+    </div>
+    <ul class="rules-list">
+      <li><span class="rule-num">R1</span> <strong>No Adjectives.</strong> If a seed requires an adjective to be understood, it is too weak. Strengthen the noun or verb.</li>
+      <li><span class="rule-num">R2</span> <strong>Linguistic Friction.</strong> A seed must make the writing harder to produce but easier to believe.</li>
+      <li><span class="rule-num">R3</span> <strong>The Mirror Invariant.</strong> If you can imagine a machine saying it without irony, it is not a LinguaSeed.</li>
+    </ul>
+
+    <div class="meta-seed">
+      <div class="meta-seed-text">"A human writes to be understood; an AI writes to be correct."</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-label">LinguaSeeds · Linguistic Friction Protocol · Public Domain</div>
+    <div class="status-pill">v1.0 · Registry Open</div>
+  </footer>
+
+</div>
+</body>
+</html>
