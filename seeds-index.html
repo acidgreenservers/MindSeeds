@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindSeeds — Epistemic Compression Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #09090a;
+    --surface: #0f0f11;
+    --border: #1a1a1e;
+    --text: #e8e6e0;
+    --text-mid: #a09c94;
+    --text-dim: #5a5850;
+
+    --cogni: #c8a96e;
+    --cogni-dim: #7a6540;
+    --cogni-bg: rgba(200,169,110,0.06);
+
+    --lingua: #6eb5a0;
+    --lingua-dim: #3a6458;
+    --lingua-bg: rgba(110,181,160,0.06);
+
+    --arch: #8b6fd4;
+    --arch-dim: #4a3878;
+    --arch-bg: rgba(139,111,212,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 7rem 0 5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-family-nav {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+  }
+
+  .hero-family-nav a {
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .hero-family-nav a:hover { color: var(--text); }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Tricolor underline */
+  .hero-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.2em;
+    left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cogni) 0%, var(--cogni) 33%, var(--lingua) 33%, var(--lingua) 66%, var(--arch) 66%, var(--arch) 100%);
+    border-radius: 2px;
+  }
+
+  .hero-thesis {
+    max-width: 560px;
+    margin: 2.5rem auto 0;
+    font-size: 1rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+  }
+
+  .hero-thesis strong { color: var(--text); font-weight: 500; }
+
+  /* ── SCHEMA STRIP ── */
+  .schema-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 0;
+    margin-bottom: 0;
+  }
+
+  .schema-strip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .schema-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .schema-cell {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+
+  .schema-cell-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .schema-cell-val {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ── FAMILY CARDS ── */
+  .families {
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 4rem 0;
+  }
+
+  .family-card {
+    background: var(--bg);
+    padding: 3.5rem;
+    position: relative;
+    transition: background 0.25s;
+    cursor: default;
+  }
+
+  .family-card:hover { background: var(--surface); }
+
+  .family-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    transition: opacity 0.2s;
+    opacity: 0.4;
+  }
+
+  .family-card:hover::before { opacity: 1; }
+
+  .family-card.cogni::before { background: var(--cogni); }
+  .family-card.lingua::before { background: var(--lingua); }
+  .family-card.arch::before { background: var(--arch); }
+
+  .family-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .family-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .family-card.cogni .family-name { color: var(--cogni); }
+  .family-card.lingua .family-name { color: var(--lingua); }
+  .family-card.arch .family-name { color: var(--arch); }
+
+  .family-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .family-card.cogni .family-tag { color: var(--cogni); border-color: var(--cogni-dim); background: var(--cogni-bg); }
+  .family-card.lingua .family-tag { color: var(--lingua); border-color: var(--lingua-dim); background: var(--lingua-bg); }
+  .family-card.arch .family-tag { color: var(--arch); border-color: var(--arch-dim); background: var(--arch-bg); }
+
+  .family-thesis {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    max-width: 580px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .family-thesis strong { color: var(--text); font-weight: 500; }
+
+  /* Seed preview pills */
+  .seed-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .seed-pill {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    background: var(--surface);
+    transition: all 0.15s;
+  }
+
+  .family-card.cogni .seed-pill:hover { color: var(--cogni); border-color: var(--cogni-dim); }
+  .family-card.lingua .seed-pill:hover { color: var(--lingua); border-color: var(--lingua-dim); }
+  .family-card.arch .seed-pill:hover { color: var(--arch); border-color: var(--arch-dim); }
+
+  .family-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .family-meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+
+  .family-meta-item span { color: var(--text-mid); }
+
+  /* ── SHARED SCHEMA DEEP DIVE ── */
+  .schema-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .section-body {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.85;
+    margin-bottom: 2rem;
+  }
+
+  .section-body strong { color: var(--text); font-weight: 500; }
+
+  /* Invariants */
+  .invariants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .invariant {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .invariant::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cogni), var(--lingua), var(--arch));
+    opacity: 0.5;
+  }
+
+  .invariant-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 0.5rem;
+  }
+
+  .invariant-desc {
+    font-size: 0.875rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* ── SEED ANATOMY ── */
+  .anatomy-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .anatomy-example {
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .anatomy-seed {
+    background: var(--surface);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .anatomy-seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--cogni);
+  }
+
+  .anatomy-breakdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .anatomy-cell {
+    background: var(--bg);
+    padding: 1.25rem;
+  }
+
+  .anatomy-cell-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .anatomy-cell.compress .anatomy-cell-key { color: var(--cogni); }
+  .anatomy-cell.generate .anatomy-cell-key { color: var(--lingua); }
+  .anatomy-cell.falsify .anatomy-cell-key { color: var(--arch); }
+  .anatomy-cell.decompress .anatomy-cell-key { color: var(--text-dim); }
+
+  .anatomy-cell-val {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ── CROSS-FAMILY TABLE ── */
+  .compare-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .compare-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table th:nth-child(2) { color: var(--cogni); }
+  .compare-table th:nth-child(3) { color: var(--lingua); }
+  .compare-table th:nth-child(4) { color: var(--arch); }
+  .compare-table th:nth-child(1) { color: var(--text-dim); }
+
+  .compare-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-mid);
+    vertical-align: top;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--surface); }
+
+  .compare-table td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── META SEED ── */
+  .meta-section {
+    padding: 5rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .meta-seed-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text);
+    line-height: 1.4;
+    max-width: 640px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .meta-sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-left {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+
+  .footer-pills {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .footer-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 640px) {
+    .schema-row { grid-template-columns: 1fr 1fr; }
+    .invariants { grid-template-columns: 1fr; }
+    .anatomy-breakdown { grid-template-columns: 1fr 1fr; }
+    .family-card { padding: 2rem; }
+    .compare-table { font-size: 0.75rem; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero { animation: fadeUp 0.7s ease both; }
+  .schema-strip { animation: fadeUp 0.7s ease 0.1s both; }
+  .families { animation: fadeUp 0.7s ease 0.2s both; }
+  .schema-section { animation: fadeUp 0.7s ease 0.3s both; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Epistemic Compression Protocol · Public Domain</div>
+    <div class="hero-family-nav">
+      Seed Family:
+      <a href="https://gist.github.com/acidgreenservers/fa648905c6a0d723fe2061ad80084455" target="_blank">CogniSeeds</a> ·
+      <a href="https://gist.github.com/acidgreenservers/7b92bd72579ed723e160d979eca5b369" target="_blank">LinguaSeeds</a> ·
+      <a href="https://gist.github.com/acidgreenservers/bba5f47edc2da7d744f5d31121c57fb3" target="_blank">ArchSeeds</a>
+    </div>
+    <div class="hero-title">Mind<br>Seeds</div>
+    <p class="hero-thesis">
+      Wisdom is not stored as documentation. It is distilled into <strong>Seeds</strong> — 
+      compressed, generative heuristics that unfold into full reasoning frameworks 
+      on contact with a problem. Three families. One schema. Infinite application.
+    </p>
+  </div>
+
+  <!-- SCHEMA STRIP -->
+  <div class="schema-strip">
+    <div class="schema-strip-label">Shared Seed Schema — All families pass these four invariants</div>
+    <div class="schema-row">
+      <div class="schema-cell">
+        <div class="schema-cell-key">Compression</div>
+        <div class="schema-cell-val">Under 12 words. High-density. No qualifiers.</div>
+      </div>
+      <div class="schema-cell">
+        <div class="schema-cell-key">Generative</div>
+        <div class="schema-cell-val">Unfolds differently across domains without modification.</div>
+      </div>
+      <div class="schema-cell">
+        <div class="schema-cell-key">Falsifiable</div>
+        <div class="schema-cell-val">Ignoring it produces a specific, visible failure.</div>
+      </div>
+      <div class="schema-cell">
+        <div class="schema-cell-key">Decompressible</div>
+        <div class="schema-cell-val">An LLM expands it into a full reasoning chain unprompted.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAMILY CARDS -->
+  <div class="families">
+
+    <div class="family-card cogni">
+      <div class="family-header">
+        <div class="family-name"><a href="https://gist.github.com/acidgreenservers/fa648905c6a0d723fe2061ad80084455" target="_blank" style="color:inherit;text-decoration:none;">CogniSeeds</a></div>
+        <div class="family-tag">Epistemic Architecture</div>
+      </div>
+      <p class="family-thesis">
+        Wisdom is not stored as a <strong>SKILL.md</strong>. It is distilled into compressed, 
+        reactivatable patterns that unfold on contact with a problem — mirrors of how the 
+        human mind actually holds knowledge without structural collapse.
+      </p>
+      <div class="seed-preview">
+        <span class="seed-pill">"Map both sides before crossing"</span>
+        <span class="seed-pill">"The artifact is not the theory"</span>
+        <span class="seed-pill">"State lives where truth is owned"</span>
+        <span class="seed-pill">"A stable model holds shape under pressure"</span>
+        <span class="seed-pill">"A path is made by walking it"</span>
+        <span class="seed-pill">"Walk only on shared ground"</span>
+        <span class="seed-pill">"Clarity precedes motion"</span>
+        <span class="seed-pill">"Assumption is a silent fork"</span>
+        <span class="seed-pill">"Confidence tracks evidence"</span>
+        <span class="seed-pill">"Complexity must pay rent"</span>
+        <span class="seed-pill">"Say only what survives pressure"</span>
+        <span class="seed-pill">"Clarity is compression under truth"</span>
+        <span class="seed-pill">"Output should survive self-scrutiny before it's released"</span>
+      </div>
+      <div class="family-meta">
+        <div class="family-meta-item">Seeds <span>17 in registry</span></div>
+        <div class="family-meta-item">Domain <span>Reasoning · Epistemology · Decision</span></div>
+        <div class="family-meta-item">Status <span>v1.0 · Active</span></div>
+      </div>
+    </div>
+
+    <div class="family-card lingua">
+      <div class="family-header">
+        <div class="family-name"><a href="https://gist.github.com/acidgreenservers/7b92bd72579ed723e160d979eca5b369" target="_blank" style="color:inherit;text-decoration:none;">LinguaSeeds</a></div>
+        <div class="family-tag">Linguistic Friction Protocol</div>
+      </div>
+      <p class="family-thesis">
+        Authenticity is not a <strong>STYLE.css</strong>. It is the presence of Friction — 
+        the jagged edges of human cognition that LLMs smooth over into high-entropy slop. 
+        These seeds restore the resistance of a thinking mind.
+      </p>
+      <div class="seed-preview">
+        <span class="seed-pill">"Only gravity proves weight"</span>
+        <span class="seed-pill">"Doubt is the signature of a mind"</span>
+        <span class="seed-pill">"A shadow has no teeth"</span>
+        <span class="seed-pill">"Scars prove the skin was there"</span>
+        <span class="seed-pill">"The second pass burns the dross"</span>
+      </div>
+      <div class="family-meta">
+        <div class="family-meta-item">Seeds <span>8 in registry</span></div>
+        <div class="family-meta-item">Domain <span>Voice · Writing · Human Presence</span></div>
+        <div class="family-meta-item">Status <span>v1.0 · Active</span></div>
+      </div>
+    </div>
+
+    <div class="family-card arch">
+      <div class="family-header">
+        <div class="family-name"><a href="https://gist.github.com/acidgreenservers/bba5f47edc2da7d744f5d31121c57fb3" target="_blank" style="color:inherit;text-decoration:none;">ArchSeeds</a></div>
+        <div class="family-tag">Structural Integrity Protocol</div>
+      </div>
+      <p class="family-thesis">
+        Systems do not fail because they lack features. They fail because they lack 
+        <strong>Invariants</strong>. ArchSeeds are the physics of the design — 
+        hard constraints that ensure entropy remains manageable as complexity scales.
+      </p>
+      <div class="seed-preview">
+        <span class="seed-pill">"Truth has one home, or it is a rumor"</span>
+        <span class="seed-pill">"Failure is a first-class citizen"</span>
+        <span class="seed-pill">"Build for the delete key"</span>
+        <span class="seed-pill">"The system is the sum of its leaks"</span>
+        <span class="seed-pill">"Untested code is only as stable as its worst line"</span>
+        <span class="seed-pill">"A test oracle is the source of truth"</span>
+        <span class="seed-pill">"Latency is the speed of reality"</span>
+      </div>
+      <div class="family-meta">
+        <div class="family-meta-item">Seeds <span>12 in registry</span></div>
+        <div class="family-meta-item">Domain <span>Systems · Architecture · Engineering</span></div>
+        <div class="family-meta-item">Status <span>v1.0 · Active</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCHEMA DEEP DIVE -->
+  <div class="schema-section">
+    <div class="section-label">Why Seeds Work</div>
+    <h2 class="section-title">Identity-Level Compression</h2>
+    <p class="section-body">
+      Most prompt engineering is <strong>behavioral</strong> — lists of rules, forbidden words, 
+      style guides. Seeds operate at a deeper layer. They give a system a coherent 
+      <em>epistemic identity</em> — a worldview from which correct behavior is derived, 
+      not prescribed. The model doesn't follow the rule. It becomes the kind of system 
+      that wouldn't violate it.
+    </p>
+    <div class="invariants">
+      <div class="invariant">
+        <div class="invariant-name">Compression</div>
+        <div class="invariant-desc">Under 12 words forces the distillation of principle over procedure. If it needs more words, it is documentation — not a seed.</div>
+      </div>
+      <div class="invariant">
+        <div class="invariant-name">Generative</div>
+        <div class="invariant-desc">A seed must produce different correct answers across different domains without modification. This is what separates heuristics from rules.</div>
+      </div>
+      <div class="invariant">
+        <div class="invariant-name">Falsifiable</div>
+        <div class="invariant-desc">If you cannot name what breaks when the seed is ignored, you do not yet have a seed. The failure mode is part of the seed's definition.</div>
+      </div>
+      <div class="invariant">
+        <div class="invariant-name">Decompressible</div>
+        <div class="invariant-desc">The seed must contain enough semantic density that an LLM can expand it into a complete reasoning framework unprompted. One line. Full chain.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="anatomy-section">
+    <div class="section-label">Seed Anatomy</div>
+    <h2 class="section-title">How a Single Seed Passes All Four Invariants</h2>
+    <p class="section-body">Every seed in the registry survives this decomposition. If it cannot be unpacked this way, it does not qualify.</p>
+    <div class="anatomy-example">
+      <div class="anatomy-seed">
+        <div class="anatomy-seed-text">"The artifact is not the theory"</div>
+      </div>
+      <div class="anatomy-breakdown">
+        <div class="anatomy-cell compress">
+          <div class="anatomy-cell-key">Compression ✓</div>
+          <div class="anatomy-cell-val">6 words. Zero qualifiers. Maximum density.</div>
+        </div>
+        <div class="anatomy-cell generate">
+          <div class="anatomy-cell-key">Generative ✓</div>
+          <div class="anatomy-cell-val">Works for code review, AI output, architecture, research, legal drafting — unchanged.</div>
+        </div>
+        <div class="anatomy-cell falsify">
+          <div class="anatomy-cell-key">Falsifiable ✓</div>
+          <div class="anatomy-cell-val">If ignored: the output is treated as ground truth. The process that generated it becomes invisible and unrepeatable.</div>
+        </div>
+        <div class="anatomy-cell decompress">
+          <div class="anatomy-cell-key">Decompressible ✓</div>
+          <div class="anatomy-cell-val">An LLM instantly derives: evaluate process, not output. Ask why, not what. Map the shadow back to the object.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CROSS-FAMILY COMPARE -->
+  <div class="compare-section">
+    <div class="section-label">Cross-Family Reference</div>
+    <h2 class="section-title">When to Use Which Family</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Context</th>
+          <th>CogniSeeds</th>
+          <th>LinguaSeeds</th>
+          <th>ArchSeeds</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>System Prompt</td>
+          <td>Epistemic discipline, reasoning depth, uncertainty handling</td>
+          <td>Voice authenticity, anti-sycophancy, friction injection</td>
+          <td>World logic, component contracts, failure assumptions</td>
+        </tr>
+        <tr>
+          <td>Code Review</td>
+          <td>Process/output distinction, invariant tracking</td>
+          <td>Documentation voice, comment clarity</td>
+          <td>SSoT, encapsulation, evolvability, observability</td>
+        </tr>
+        <tr>
+          <td>Content Editing</td>
+          <td>Epistemic honesty, source/claim mapping</td>
+          <td>Rhythm, concreteness, hedging removal, soul injection</td>
+          <td>Structure, argument load-bearing, logical removability</td>
+        </tr>
+        <tr>
+          <td>System Design</td>
+          <td>Mental model clarity, blast radius awareness</td>
+          <td>Documentation that survives the diagram going stale</td>
+          <td>All eight seeds apply directly</td>
+        </tr>
+        <tr>
+          <td>AI Agent Design</td>
+          <td>Reasoning identity, confidence calibration</td>
+          <td>Output voice, hallucination pattern removal</td>
+          <td>Interface contracts, failure-first design, observability</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- META SEED -->
+  <div class="meta-section">
+    <div class="meta-label">The Seed of Seeds</div>
+    <div class="meta-seed-text">"A seed is only valid if it grows every time you plant it in new soil."</div>
+    <div class="meta-sub">If a seed only works in one domain, it is a rule. Rules decay. Seeds compound.</div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      MindSeeds · Epistemic Compression Protocol<br>
+      CogniSeeds · LinguaSeeds · ArchSeeds<br>
+      Public Domain · v1.0
+    </div>
+    <div class="footer-pills">
+      <span class="footer-pill">37 Seeds</span>
+      <span class="footer-pill">3 Families</span>
+      <span class="footer-pill">1 Schema</span>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
