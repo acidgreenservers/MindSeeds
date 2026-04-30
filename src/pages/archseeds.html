@@ -14,8 +14,8 @@
     --accent: #8b6fd4;
     --accent-dim: #4a3878;
     --text: #e4e1ef;
-    --text-dim: #6a6478;
-    --text-mid: #a89ec0;
+    --text-dim: #9894a8;
+    --text-mid: #ccc8dc;
     --warm: #c47a4a;
     --seed-bg: #0b0a10;
   }
@@ -715,6 +715,32 @@
         <div class="seed-deploy">
           <div class="seed-label">Deploy When</div>
           <p>Security review, API design, any system that accepts external input or handles sensitive state.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The project lives in the gap between testing and building"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · State Emergence</div>
+          <p>True application state isn't found in the code or the tests alone. It lives in what the tests reveal about the build. The gap is the signal.</p>
+          <div class="failure-tag">Prevents: False Confidence in Either Direction</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Any moment you think you're done — when the build passes but tests haven't run, or tests pass but the build is unverified.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"The seam between front and back is where attackers test for free"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Boundary Security</div>
+          <p>The vulnerability lives in the contract between systems, not within them. Every unvalidated assumption crossing that seam is an open invitation. Attackers run the same probes as testers — just without being asked.</p>
+          <div class="failure-tag">Prevents: Unguarded Seam Exploitation</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>API design, auth implementation, input validation, any data crossing the client-server boundary.</p>
         </div>
       </div>
 
