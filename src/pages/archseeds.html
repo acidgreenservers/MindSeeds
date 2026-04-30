@@ -482,9 +482,9 @@
 
   <header>
     <div class="family-nav">
-      <a class="family-pill" href="cogniseeds.html">CogniSeeds · Reasoning</a>
-      <a class="family-pill" href="linguaseeds.html">LinguaSeeds · Voice</a>
-      <a class="family-pill" href="#">ArchSeeds · Structure</a>
+      <a class="family-pill" href="./cogniseeds.html">CogniSeeds · Reasoning</a>
+      <a class="family-pill" href="./linguaseeds.html">LinguaSeeds · Voice</a>
+      <a class="family-pill active" href="#">ArchSeeds · Structure</a>
     </div>
     <div class="category-label">System Architecture · Structural Design · v1.0</div>
     <h1>Arch<br><em>Seeds</em></h1>
@@ -689,6 +689,32 @@
         <div class="seed-deploy">
           <div class="seed-label">Deploy When</div>
           <p>Designing test suites, writing assertions, any system where "working" needs a definition before it can be verified.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Code reflects the thinking that wrote it"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Cognitive Integrity</div>
+          <p>Lint catches syntax, but only rigorous thinking catches architecture. The code is a mirror of the mind that made it.</p>
+          <div class="failure-tag">Prevents: Surface-Level Correctness</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Code review, any generation task, before shipping anything that will outlive the moment it was written.</p>
+        </div>
+      </div>
+
+      <div class="seed-card">
+        <div class="seed-text">"Your code must survive your own attempt to break it"</div>
+        <div class="seed-function">
+          <div class="seed-label">Pattern · Red Team Verification</div>
+          <p>Adversarial self-review before external exposure. If you can break it, someone else already has.</p>
+          <div class="failure-tag">Prevents: Untested Adversarial Surface</div>
+        </div>
+        <div class="seed-deploy">
+          <div class="seed-label">Deploy When</div>
+          <p>Security review, API design, any system that accepts external input or handles sensitive state.</p>
         </div>
       </div>
 
