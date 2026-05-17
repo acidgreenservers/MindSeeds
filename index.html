@@ -302,6 +302,30 @@
   .family-card.lingua .seed-pill.copied { border-color: var(--lingua); color: var(--lingua); }
   .family-card.arch .seed-pill.copied { border-color: var(--arch); color: var(--arch); }
 
+  /* ── COPY TOAST ── */
+  .copy-toast {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    z-index: 10000;
+    animation: toastFade 1s ease-out forwards;
+  }
+
+  @keyframes toastFade {
+    0% { opacity: 0; transform: translate(-50%, 5px); }
+    15% { opacity: 1; transform: translate(-50%, -5px); }
+    80% { opacity: 1; transform: translate(-50%, -5px); }
+    100% { opacity: 0; transform: translate(-50%, -15px); }
+  }
+
   .family-meta {
     display: flex;
     gap: 2rem;

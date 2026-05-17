@@ -7,7 +7,32 @@ const CONFIG = {
     selector: '.seed-pill',
     containerSelector: '.families',
     copiedClass: 'copied',
-    feedbackDuration: 500
+    feedbackDuration: 500,
+    toastClass: 'copy-toast',
+    toastText: 'Copied'
+};
+
+/**
+ * Creates and displays a temporary toast above the clicked element.
+ * @param {HTMLElement} pill
+ */
+const showToast = (pill) => {
+    const rect = pill.getBoundingClientRect();
+    const toast = document.createElement('div');
+
+    toast.className = CONFIG.toastClass;
+    toast.innerText = CONFIG.toastText;
+
+    // Position toast centered above the pill
+    toast.style.left = `${rect.left + rect.width / 2}px`;
+    toast.style.top = `${rect.top}px`;
+
+    document.body.appendChild(toast);
+
+    // Remove toast after animation
+    setTimeout(() => {
+        toast.remove();
+    }, 1000);
 };
 
 /**
@@ -61,6 +86,8 @@ const handleSeedClick = async (event) => {
 
         // Visual Feedback
         pill.classList.add(CONFIG.copiedClass);
+        showToast(pill);
+
         setTimeout(() => {
             pill.classList.remove(CONFIG.copiedClass);
         }, CONFIG.feedbackDuration);
