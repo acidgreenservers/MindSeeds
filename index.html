@@ -265,12 +265,26 @@
     border: 1px solid var(--border);
     color: var(--text-mid);
     background: var(--surface);
+    transition: all 0.8s ease-out;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .seed-pill:hover {
     transition: all 0.15s;
   }
 
   .family-card.cogni .seed-pill:hover { color: var(--cogni); border-color: var(--cogni-dim); }
   .family-card.lingua .seed-pill:hover { color: var(--lingua); border-color: var(--lingua-dim); }
   .family-card.arch .seed-pill:hover { color: var(--arch); border-color: var(--arch-dim); }
+
+  .seed-pill.copied {
+    transition: all 0.05s;
+  }
+
+  .family-card.cogni .seed-pill.copied { border-color: var(--cogni); color: var(--cogni); }
+  .family-card.lingua .seed-pill.copied { border-color: var(--lingua); color: var(--lingua); }
+  .family-card.arch .seed-pill.copied { border-color: var(--arch); color: var(--arch); }
 
   .family-meta {
     display: flex;
@@ -816,5 +830,21 @@
   </footer>
 
 </div>
+<script>
+  document.querySelectorAll('.seed-preview .seed-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const text = pill.innerText.replace(/^"|"$/g, '');
+
+      navigator.clipboard.writeText(text).then(() => {
+        pill.classList.add('copied');
+        setTimeout(() => {
+          pill.classList.remove('copied');
+        }, 500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
 </body>
 </html>
