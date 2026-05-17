@@ -854,21 +854,6 @@
   </footer>
 
 </div>
-<script>
-  document.querySelectorAll('.seed-preview .seed-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      const text = pill.innerText.replace(/^"|"$/g, '');
-
-      navigator.clipboard.writeText(text).then(() => {
-        pill.classList.add('copied');
-        setTimeout(() => {
-          pill.classList.remove('copied');
-        }, 500);
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-      });
-    });
-  });
-</script>
+<script type="module" src="./src/js/copy-handler.js"></script>
 </body>
 </html>
