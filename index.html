@@ -281,12 +281,50 @@
     border: 1px solid var(--border);
     color: var(--text-mid);
     background: var(--surface);
+    transition: all 0.8s ease-out;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .seed-pill:hover {
     transition: all 0.15s;
   }
 
   .family-card.cogni .seed-pill:hover { color: var(--cogni); border-color: var(--cogni-dim); }
   .family-card.lingua .seed-pill:hover { color: var(--lingua); border-color: var(--lingua-dim); }
   .family-card.arch .seed-pill:hover { color: var(--arch); border-color: var(--arch-dim); }
+
+  .seed-pill.copied {
+    transition: all 0.05s;
+  }
+
+  .family-card.cogni .seed-pill.copied { border-color: var(--cogni); color: var(--cogni); }
+  .family-card.lingua .seed-pill.copied { border-color: var(--lingua); color: var(--lingua); }
+  .family-card.arch .seed-pill.copied { border-color: var(--arch); color: var(--arch); }
+
+  /* ── COPY TOAST ── */
+  .copy-toast {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    z-index: 10000;
+    animation: toastFade 1s ease-out forwards;
+  }
+
+  @keyframes toastFade {
+    0% { opacity: 0; transform: translate(-50%, 5px); }
+    15% { opacity: 1; transform: translate(-50%, -5px); }
+    80% { opacity: 1; transform: translate(-50%, -5px); }
+    100% { opacity: 0; transform: translate(-50%, -15px); }
+  }
 
   .family-meta {
     display: flex;
@@ -840,5 +878,6 @@
   </footer>
 
 </div>
+<script type="module" src="./src/js/copy-handler.js"></script>
 </body>
 </html>
