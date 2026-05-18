@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg text-ink font-sans font-light leading-relaxed min-h-screen overflow-x-hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-[900px] mx-auto px-8;
+  }
+
+  .hero-underline {
+    position: relative;
+  }
+  .hero-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -0.2em;
+    left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #c8a96e 0%, #c8a96e 33%, #6eb5a0 33%, #6eb5a0 66%, #8b6fd4 66%, #8b6fd4 100%);
+    border-radius: 2px;
+  }
+}
