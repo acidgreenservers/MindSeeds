@@ -57,7 +57,7 @@ const ArchSeedsPage: React.FC = () => {
         </header>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-arch-dim tracking-widest min-w-[2.5rem]">01</span>
             <h2 className="font-serif text-[1.4rem] text-ink">The Problem — The Complexity Trap</h2>
           </div>
@@ -74,7 +74,7 @@ const ArchSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-arch-dim tracking-widest min-w-[2.5rem]">02</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Seed Schema — Structural Integrity Check</h2>
           </div>
@@ -86,7 +86,7 @@ const ArchSeedsPage: React.FC = () => {
               { key: 'Falsifiable', val: 'If ignored, the system becomes brittle or leaky. The failure mode is specific.' },
               { key: 'Decompressible', val: 'Must imply the failure it prevents — circular dependency, state drift, silent corruption.' }
             ].map((item) => (
-              <div key={item.key} className="bg-surface p-6 relative">
+              <div key={item.key} className="bg-bg p-6 relative transition-colors">
                 <div className="font-mono text-[0.6rem] tracking-widest text-arch uppercase mb-1.5">{item.key}</div>
                 <p className="text-[0.875rem] text-ink-mid leading-relaxed m-0">{item.val}</p>
               </div>
@@ -95,7 +95,7 @@ const ArchSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-arch-dim tracking-widest min-w-[2.5rem]">03</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Seed Registry — v1.0</h2>
           </div>
@@ -109,27 +109,27 @@ const ArchSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-arch-dim tracking-widest min-w-[2.5rem]">04</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Deployment — Planting the Skeleton</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-arch uppercase mb-4">In Software Engineering</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mb-4">Instead of a 50-page architecture doc, use a <strong className="text-ink font-medium">Seed Block</strong> in the README.</p>
               <div className="border-l-2 border-arch-dim pl-4 italic text-ink-dim text-[0.8rem]">"This service operates under the Rumor Seed and the Delete Seed. No local caching of user data; every module must be removable in under 1 hour."</div>
             </div>
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-arch uppercase mb-4">In Prompt Engineering</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mb-4">Use ArchSeeds to define the world logic for an LLM agent.</p>
               <div className="border-l-2 border-arch-dim pl-4 italic text-ink-dim text-[0.8rem]">"Apply the Interface Seed: do not suggest implementation details for the backend — only define the JSON contract."</div>
             </div>
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-arch uppercase mb-4">In System Audits</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7]">Run each seed as a diagnostic question against an existing system.</p>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mt-4 italic text-arch">"Where does truth live — and is it rumored anywhere else?" <span className="text-ink-dim not-italic ml-2">One question. Full SSoT audit.</span></p>
             </div>
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-arch uppercase mb-4">In Logic and Synthesis</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7]">Use the <strong className="text-ink font-medium">Gravity Seed</strong> to evaluate any proposed solution. If it requires storing too much state — memory, context, history — the seed flags it as a high-entropy, high-risk path before a line of code is written.</p>
             </div>
@@ -137,7 +137,7 @@ const ArchSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-arch-dim tracking-widest min-w-[2.5rem]">05</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Contribution Rules</h2>
           </div>
@@ -147,7 +147,7 @@ const ArchSeedsPage: React.FC = () => {
               { id: 'R2', title: 'Structural, Not Aesthetic.', desc: 'If the seed describes how something looks rather than how it holds together, it belongs in LinguaSeeds.' },
               { id: 'R3', title: 'The Seismic Invariant.', desc: 'If the system is shaken by 10x load or a 50% staff cut, the ArchSeed should be the thing still standing.' }
             ].map(rule => (
-              <div key={rule.id} className="flex gap-4 p-4 bg-surface border border-border rounded-sm items-baseline">
+              <div key={rule.id} className="flex gap-4 p-4 bg-bg border border-border rounded-sm items-baseline transition-colors">
                 <span className="font-mono text-[0.65rem] text-arch-dim min-w-[1.5rem]">{rule.id}</span>
                 <div className="text-[0.9rem] text-ink-mid">
                   <strong className="text-ink font-medium">{rule.title}</strong> {rule.desc}
@@ -160,7 +160,7 @@ const ArchSeedsPage: React.FC = () => {
             <div className="font-serif italic text-xl text-ink leading-relaxed">"A perfect system is not one where nothing is added, but one where nothing can be removed."</div>
           </div>
 
-          <div className="mt-8 p-8 border border-border rounded-md bg-surface">
+          <div className="mt-8 p-8 border border-border rounded-md bg-bg">
             <div className="font-mono text-[0.75rem] text-ink-mid tracking-wide mb-6 pb-6 border-b border-border">
               Peter Naur — <em className="italic text-arch">"the code is just the shadow of the program"</em>
             </div>
@@ -170,7 +170,7 @@ const ArchSeedsPage: React.FC = () => {
                 { q: 'Where does feedback live?', a: 'how does the system know itself' },
                 { q: 'What breaks if I delete this?', a: 'blast radius awareness' }
               ].map(item => (
-                <div key={item.q} className="flex items-baseline gap-4 text-[0.875rem]">
+                <div key={item.q} className="flex items-baseline transition-colors gap-4 text-[0.875rem]">
                   <span className="font-serif italic text-arch min-w-[200px]">{item.q}</span>
                   <span className="font-mono text-[0.65rem] text-arch-dim">→</span>
                   <span className="text-ink-mid text-[0.85rem]">{item.a}</span>

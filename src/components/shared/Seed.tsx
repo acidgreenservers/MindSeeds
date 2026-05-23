@@ -63,7 +63,7 @@ export const Seed: React.FC<SeedProps> = ({ data, variant }) => {
   const isCopied = copiedId === data.id;
 
   return (
-    <div className={'bg-[#0d0d0b] p-7 md:grid md:grid-cols-3 gap-8 items-start transition-colors duration-200 relative group hover:bg-[#111110] before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 ' + (data.category ? accentBorder[data.category] : '')}>
+    <div className={'bg-surface/40 p-7 md:grid md:grid-cols-3 gap-8 items-start transition-colors duration-200 relative group hover:bg-surface before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 ' + (data.category ? accentBorder[data.category] : '')}>
       <div className="flex gap-4 col-start-1">
         <button
           onClick={handleCopy}

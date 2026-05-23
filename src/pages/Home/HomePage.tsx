@@ -64,7 +64,7 @@ const HomePage: React.FC = () => {
               { key: 'Falsifiable', val: 'Ignoring it produces a specific, visible failure.' },
               { key: 'Decompressible', val: 'An LLM expands it into a full reasoning chain unprompted.' }
             ].map((item) => (
-              <div key={item.key} className="bg-surface p-5 text-center">
+              <div key={item.key} className="bg-bg p-5 text-center transition-colors">
                 <div className="font-mono text-[0.6rem] tracking-widest text-ink-dim uppercase mb-2">{item.key}</div>
                 <div className="text-[0.82rem] text-ink-mid leading-relaxed">{item.val}</div>
               </div>
@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
         </div>
 
         <div className="my-16 bg-border border border-border rounded-lg overflow-hidden flex flex-col gap-px">
-          <div className="bg-bg p-8 md:p-14 relative transition-colors duration-250 cursor-default hover:bg-surface border-l-[3px] border-l-cogni/40 hover:border-l-cogni">
+          <div className="bg-bg p-8 md:p-14 relative transition-all duration-250 cursor-default hover:bg-surface/50 border-l-[3px] border-l-cogni/40 hover:border-l-cogni">
             <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
               <Link to="/cogni" className="font-serif text-[2rem] tracking-tight text-cogni no-underline">CogniSeeds</Link>
               <div className="font-mono text-[0.6rem] tracking-wide uppercase px-3 py-1 rounded-full border border-cogni-dim text-cogni bg-cogni-bg">
@@ -97,7 +97,7 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-bg p-8 md:p-14 relative transition-colors duration-250 cursor-default hover:bg-surface border-l-[3px] border-l-lingua/40 hover:border-l-lingua">
+          <div className="bg-bg p-8 md:p-14 relative transition-all duration-250 cursor-default hover:bg-surface/50 border-l-[3px] border-l-lingua/40 hover:border-l-lingua">
             <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
               <Link to="/lingua" className="font-serif text-[2rem] tracking-tight text-lingua no-underline">LinguaSeeds</Link>
               <div className="font-mono text-[0.6rem] tracking-wide uppercase px-3 py-1 rounded-full border border-lingua-dim text-lingua bg-lingua-bg">
@@ -121,7 +121,7 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-bg p-8 md:p-14 relative transition-colors duration-250 cursor-default hover:bg-surface border-l-[3px] border-l-arch/40 hover:border-l-arch">
+          <div className="bg-bg p-8 md:p-14 relative transition-all duration-250 cursor-default hover:bg-surface/50 border-l-[3px] border-l-arch/40 hover:border-l-arch">
             <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
               <Link to="/arch" className="font-serif text-[2rem] tracking-tight text-arch no-underline">ArchSeeds</Link>
               <div className="font-mono text-[0.6rem] tracking-wide uppercase px-3 py-1 rounded-full border border-arch-dim text-arch bg-arch-bg">
@@ -163,7 +163,7 @@ const HomePage: React.FC = () => {
               { name: 'Falsifiable', desc: 'If you cannot name what breaks when the seed is ignored, you do not yet have a seed. The failure mode is part of the seed\'s definition.' },
               { name: 'Decompressible', desc: 'The seed must contain enough semantic density that an LLM can expand it into a complete reasoning framework unprompted. One line. Full chain.' }
             ].map(inv => (
-              <div key={inv.name} className="border border-border rounded-[4px] p-6 bg-surface relative overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-cogni before:via-lingua before:to-arch before:opacity-50">
+              <div key={inv.name} className="border border-border rounded-[4px] p-6 bg-surface/50 relative overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-cogni before:via-lingua before:to-arch before:opacity-50">
                 <div className="font-mono text-[0.65rem] tracking-wide uppercase text-ink-mid mb-2">{inv.name}</div>
                 <div className="text-[0.875rem] text-ink-mid leading-relaxed">{inv.desc}</div>
               </div>
@@ -241,9 +241,9 @@ const HomePage: React.FC = () => {
             Public Domain · v1.0
           </div>
           <div className="flex gap-4">
-            <span className="px-3 py-1 rounded-full border border-border bg-surface text-ink-mid">59 Seeds</span>
-            <span className="px-3 py-1 rounded-full border border-border bg-surface text-ink-mid">3 Families</span>
-            <span className="px-3 py-1 rounded-full border border-border bg-surface text-ink-mid">1 Schema</span>
+            <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">59 Seeds</span>
+            <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">3 Families</span>
+            <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">1 Schema</span>
           </div>
         </footer>
       </div>
