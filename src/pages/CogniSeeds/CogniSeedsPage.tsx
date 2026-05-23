@@ -86,7 +86,7 @@ const CogniSeedsPage: React.FC = () => {
               { key: 'Falsifiable', val: 'Must have a clear failure state. If the seed is ignored, something specific breaks.' },
               { key: 'Decompressible', val: 'An LLM should be able to expand it into a full reasoning chain without further prompting.' }
             ].map((item) => (
-              <div key={item.key} className="bg-surface p-6 relative">
+              <div key={item.key} className="bg-bg p-6 relative transition-colors">
                 <div className="font-mono text-[0.6rem] tracking-widest text-cogni uppercase mb-1.5">{item.key}</div>
                 <p className="text-[0.875rem] text-ink-mid leading-relaxed m-0">{item.val}</p>
               </div>
@@ -120,7 +120,7 @@ const CogniSeedsPage: React.FC = () => {
               { title: 'In Code Review', desc: 'Use seeds as shorthand for systemic failures. "This PR violates the floor/ceiling seed" communicates a full architectural critique in five words. Shared vocabulary, shared reasoning.' },
               { title: 'In Strategic Design', desc: 'Align teams on the vibe of a solution before writing the first line of code. Seeds provide a common epistemic frame that survives disagreement about implementation details.' }
             ].map(item => (
-              <div key={item.title} className="bg-surface border border-border rounded-md p-6">
+              <div key={item.title} className="bg-bg border border-border rounded-md p-6 transition-colors">
                 <h3 className="font-mono text-[0.7rem] tracking-widest text-cogni uppercase mb-4">{item.title}</h3>
                 <p className="text-[0.85rem] text-ink-mid leading-[1.7] m-0">{item.desc}</p>
               </div>
@@ -141,7 +141,7 @@ const CogniSeedsPage: React.FC = () => {
               { id: 'R4', title: 'Child-readable, Engineer-applicable.', desc: 'A seed must be explainable to a child and deployable by a senior engineer without modification.' },
               { id: 'R5', title: 'The vault is append-only.', desc: 'Seeds are never deleted. A better seed supersedes — it does not replace.' }
             ].map(rule => (
-              <div key={rule.id} className="flex gap-4 p-4 bg-surface border border-border rounded-sm items-baseline">
+              <div key={rule.id} className="flex gap-4 p-4 bg-bg border border-border rounded-sm items-baseline transition-colors">
                 <span className="font-mono text-[0.65rem] text-cogni-dim min-w-[1.5rem]">{rule.id}</span>
                 <div className="text-[0.9rem] text-ink-mid">
                   <strong className="text-ink font-medium">{rule.title}</strong> {rule.desc}

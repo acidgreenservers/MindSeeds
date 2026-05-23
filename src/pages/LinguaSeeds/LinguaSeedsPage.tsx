@@ -57,7 +57,7 @@ const LinguaSeedsPage: React.FC = () => {
         </header>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-lingua-dim tracking-widest min-w-[2.5rem]">01</span>
             <h2 className="font-serif text-[1.4rem] text-ink">The Problem — The Uncanny Valley of Syntax</h2>
           </div>
@@ -75,7 +75,7 @@ const LinguaSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-lingua-dim tracking-widest min-w-[2.5rem]">02</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Seed Schema — Structural Integrity Check</h2>
           </div>
@@ -87,7 +87,7 @@ const LinguaSeedsPage: React.FC = () => {
               { key: 'Falsifiable', val: 'If ignored, the text remains AI-smooth. The failure is visible.' },
               { key: 'Decompressible', val: 'Must imply the specific AI-isms to be purged — no ambiguity about what to cut.' }
             ].map((item) => (
-              <div key={item.key} className="bg-surface p-6 relative">
+              <div key={item.key} className="bg-bg p-6 relative transition-colors">
                 <div className="font-mono text-[0.6rem] tracking-widest text-lingua uppercase mb-1.5">{item.key}</div>
                 <p className="text-[0.875rem] text-ink-mid leading-relaxed m-0">{item.val}</p>
               </div>
@@ -96,7 +96,7 @@ const LinguaSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-lingua-dim tracking-widest min-w-[2.5rem]">03</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Seed Registry — v1.0</h2>
           </div>
@@ -110,34 +110,34 @@ const LinguaSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-lingua-dim tracking-widest min-w-[2.5rem]">04</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Deployment — How to Plant a Seed</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-lingua uppercase mb-4">In LLM System Prompts</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mb-4">Instead of a list of 200 forbidden words, inject the <strong className="text-ink font-medium">Seed Block</strong>.</p>
               <div className="border-l-2 border-lingua-dim pl-4 italic text-ink-dim text-[0.8rem]">"Operate under the Gravity Seed and the Stride Seed. If a sentence feels seamless, break it."</div>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mt-4">This forces the model to rethink its internal probability map before a single token is generated.</p>
             </div>
-            <div className="bg-surface border border-border rounded-md p-6">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-lingua uppercase mb-4">In Content Editing</h3>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7]">Use seeds as a diagnostic lens. If a paragraph feels off, ask: <em className="italic text-lingua">"Which seed is missing?"</em></p>
               <p className="text-[0.85rem] text-ink-mid leading-[1.7] mt-4">Missing <strong className="text-ink font-medium">Gravity</strong>? Add a hard fact. Missing <strong className="text-ink font-medium">Stride</strong>? Cut a sentence in half. Use a fragment.</p>
             </div>
-            <div className="bg-surface border border-border rounded-md p-6 md:col-span-2">
+            <div className="bg-bg border border-border rounded-md p-6 transition-colors md:col-span-2">
               <h3 className="font-mono text-[0.7rem] tracking-widest text-lingua uppercase mb-4">The Anti-AI Recursive Pass — Dross Seed</h3>
               <div className="flex flex-col gap-4">
-                <div className="flex gap-4 items-baseline">
+                <div className="flex gap-4 items-baseline transition-colors">
                   <span className="font-mono text-[0.65rem] text-lingua-dim">01</span>
                   <div className="text-[0.85rem] text-ink-mid"><strong className="text-ink">Prompt:</strong> "Stare at this text. What makes it obviously AI?"</div>
                 </div>
-                <div className="flex gap-4 items-baseline">
+                <div className="flex gap-4 items-baseline transition-colors">
                   <span className="font-mono text-[0.65rem] text-lingua-dim">02</span>
                   <div className="text-[0.85rem] text-ink-mid"><strong className="text-ink">Action:</strong> The model identifies its own tells — "I used the word 'landscape' three times."</div>
                 </div>
-                <div className="flex gap-4 items-baseline">
+                <div className="flex gap-4 items-baseline transition-colors">
                   <span className="font-mono text-[0.65rem] text-lingua-dim">03</span>
                   <div className="text-[0.85rem] text-ink-mid"><strong className="text-ink">Prompt:</strong> "Now apply the Grip Seed and excise them."</div>
                 </div>
@@ -147,7 +147,7 @@ const LinguaSeedsPage: React.FC = () => {
         </section>
 
         <section className="py-14 border-b border-border">
-          <div className="flex items-baseline gap-4 mb-8">
+          <div className="flex items-baseline transition-colors gap-4 mb-8">
             <span className="font-mono text-[0.65rem] text-lingua-dim tracking-widest min-w-[2.5rem]">05</span>
             <h2 className="font-serif text-[1.4rem] text-ink">Contribution Rules</h2>
           </div>
@@ -157,7 +157,7 @@ const LinguaSeedsPage: React.FC = () => {
               { id: 'R2', title: 'Linguistic Friction.', desc: 'A seed must make the writing harder to produce but easier to believe.' },
               { id: 'R3', title: 'The Mirror Invariant.', desc: 'If you can imagine a machine saying it without irony, it is not a LinguaSeed.' }
             ].map(rule => (
-              <div key={rule.id} className="flex gap-4 p-4 bg-surface border border-border rounded-sm items-baseline">
+              <div key={rule.id} className="flex gap-4 p-4 bg-bg border border-border rounded-sm items-baseline transition-colors">
                 <span className="font-mono text-[0.65rem] text-lingua-dim min-w-[1.5rem]">{rule.id}</span>
                 <div className="text-[0.9rem] text-ink-mid">
                   <strong className="text-ink font-medium">{rule.title}</strong> {rule.desc}

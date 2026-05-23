@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,33 +8,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#09090a',
-        surface: '#0f0f11',
-        border: '#1a1a1e',
+        bg: 'rgb(var(--bg) / <alpha-value>)',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
         ink: {
-          DEFAULT: '#e8e6e0',
-          mid: '#c8c4bc',
-          dim: '#8a8880',
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          mid: 'rgb(var(--ink-mid) / <alpha-value>)',
+          dim: 'rgb(var(--ink-dim) / <alpha-value>)',
         },
         cogni: {
-          DEFAULT: '#c8a96e',
-          dim: '#7a6540',
-          bg: 'rgba(200,169,110,0.06)',
+          DEFAULT: 'rgb(var(--cogni) / <alpha-value>)',
+          dim: 'rgb(var(--cogni-dim) / <alpha-value>)',
+          bg: 'rgb(var(--cogni) / 0.06)',
         },
         lingua: {
-          DEFAULT: '#6eb5a0',
-          dim: '#3a6458',
-          bg: 'rgba(110,181,160,0.06)',
+          DEFAULT: 'rgb(var(--lingua) / <alpha-value>)',
+          dim: 'rgb(var(--lingua-dim) / <alpha-value>)',
+          bg: 'rgb(var(--lingua) / 0.06)',
         },
         arch: {
-          DEFAULT: '#8b6fd4',
-          dim: '#4a3878',
-          bg: 'rgba(139,111,212,0.06)',
+          DEFAULT: 'rgb(var(--arch) / <alpha-value>)',
+          dim: 'rgb(var(--arch-dim) / <alpha-value>)',
+          bg: 'rgb(var(--arch) / 0.06)',
         },
         failure: {
-          DEFAULT: '#e05a5a',
-          bg: 'rgba(224,90,90,0.08)',
-          border: 'rgba(224,90,90,0.2)',
+          DEFAULT: 'rgb(var(--failure) / <alpha-value>)',
+          bg: 'rgb(var(--failure) / 0.08)',
+          border: 'rgb(var(--failure) / 0.2)',
         }
       },
       fontFamily: {
