@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Layout, Footer } from '@/components/shared/Layout';
 import { Seed } from '@/components/shared/Seed';
 import { SeedData } from '@/types';
 import { Link } from 'react-router-dom';
 
 const CogniSeedsPage: React.FC = () => {
-  const [seeds, setSeeds] = useState<SeedData[]>([]);
-
-  useEffect(() => {
-    const loadSeeds = async () => {
-      // @ts-ignore
-      const modules = import.meta.glob('./seeds/*.tsx');
-      const loadedSeeds: SeedData[] = [];
-      for (const path in modules) {
-        const mod = await modules[path]() as any;
-        if (mod.data) {
-          loadedSeeds.push(mod.data);
-        }
-      }
-      setSeeds(loadedSeeds);
-    };
-    loadSeeds();
-  }, []);
+  // Optimization: Eagerly load seed modules for synchronous access.
+  const modules = import.meta.glob('./seeds/*.tsx', { eager: true });
+  const seeds = Object.values(modules)
+    .map((mod: any) => mod.data as SeedData)
+    .filter(Boolean);
 
   return (
     <Layout>
