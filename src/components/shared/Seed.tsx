@@ -11,9 +11,9 @@ interface SeedProps {
 export const Seed: React.FC<SeedProps> = ({ data, variant }) => {
   const { copy, copiedId } = useClipboard();
   const [toastPos, setToastPos] = useState({ x: 0, y: 0 });
-  const pillRef = useRef<HTMLSpanElement>(null);
+  const pillRef = useRef<HTMLButtonElement>(null);
 
-  const handleCopy = (e: React.MouseEvent) => {
+  const handleCopy = (e: React.MouseEvent | React.KeyboardEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     setToastPos({
       x: rect.left + (variant === 'pill' ? rect.width / 2 : 20),
@@ -39,16 +39,17 @@ export const Seed: React.FC<SeedProps> = ({ data, variant }) => {
 
     return (
       <>
-        <span
+        <button
           ref={pillRef}
           onClick={handleCopy}
-          className={'font-serif italic text-[0.78rem] px-3 py-1.5 rounded-[3px] border border-border bg-surface text-ink-mid cursor-pointer select-none transition-all duration-800 ease-out ' +
+          aria-label={`Copy seed: ${data.text}`}
+          className={'font-serif italic text-[0.78rem] px-3 py-1.5 rounded-[3px] border border-border bg-surface text-ink-mid cursor-pointer select-none transition-all duration-800 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20 ' +
             (data.category ? categoryColors[data.category] : '') + ' ' +
             (isCopied ? '!duration-50 ' + (data.category ? copiedColors[data.category] : '') : '')
           }
         >
           {data.text}
-        </span>
+        </button>
         <Toast x={toastPos.x} y={toastPos.y} visible={isCopied} />
       </>
     );
@@ -67,7 +68,8 @@ export const Seed: React.FC<SeedProps> = ({ data, variant }) => {
       <div className="flex gap-4 col-start-1">
         <button
           onClick={handleCopy}
-          className={`mt-1 h-5 w-5 flex-shrink-0 flex items-center justify-center rounded border border-border bg-surface text-ink-dim hover:text-ink hover:border-text-mid transition-all duration-800 ease-out opacity-0 group-hover:opacity-100 focus:opacity-100 outline-none cursor-pointer ${isCopied ? '!text-green-500 !border-green-500/50 opacity-100 !duration-50' : ''}`}
+          className={`mt-1 h-5 w-5 flex-shrink-0 flex items-center justify-center rounded border border-border bg-surface text-ink-dim hover:text-ink hover:border-text-mid transition-all duration-800 ease-out opacity-0 group-hover:opacity-100 focus:opacity-100 focus-visible:ring-2 focus-visible:ring-ink/20 outline-none cursor-pointer ${isCopied ? '!text-green-500 !border-green-500/50 opacity-100 !duration-50' : ''}`}
+          aria-label={`Copy seed: ${data.text}`}
           title="Copy Seed"
         >
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

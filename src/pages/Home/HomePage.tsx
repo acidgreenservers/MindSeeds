@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
             Epistemic Compression Protocol · Public Domain
           </div>
           <div className="font-mono text-[0.68rem] tracking-wide text-ink-dim mb-8">
-            <a href="https://acidgreenservers.github.io/MindSeeds/" target="_blank" className="text-ink-mid hover:text-ink transition-colors">MindSeeds Website</a> &nbsp;·&nbsp;
+            <a href="https://acidgreenservers.github.io/MindSeeds/" target="_blank" rel="noopener noreferrer" className="text-ink-mid hover:text-ink transition-colors">MindSeeds Website</a> &nbsp;·&nbsp;
             Seed Family:
             <Link to="/cogni" className="text-ink-mid hover:text-ink transition-colors ml-2">CogniSeeds</Link> ·
             <Link to="/lingua" className="text-ink-mid hover:text-ink transition-colors mx-2">LinguaSeeds</Link> ·
@@ -49,7 +49,7 @@ const HomePage: React.FC = () => {
             on contact with a problem. Three families. One schema. Infinite application.
           </p>
           <div className="mt-5 font-mono text-[0.65rem] tracking-wide text-ink-dim">
-            Also on: <a href="https://acidgreenservers.github.io/Noosphere-Nexus/docs/prompting-for-cognition" target="_blank" className="text-ink-mid hover:text-ink transition-colors">Noosphere Nexus · Prompting For Cognition</a>
+            Also on: <a href="https://acidgreenservers.github.io/Noosphere-Nexus/docs/prompting-for-cognition" target="_blank" rel="noopener noreferrer" className="text-ink-mid hover:text-ink transition-colors">Noosphere Nexus · Prompting For Cognition</a>
           </div>
         </div>
 
