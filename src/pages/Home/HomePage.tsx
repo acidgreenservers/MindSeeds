@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Layout, Footer } from '@/components/shared/Layout';
 import { Seed } from '@/components/shared/Seed';
 import { SeedData } from '@/types';
 import { Link } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
-  const [seeds, setSeeds] = useState<SeedData[]>([]);
-
-  useEffect(() => {
-    const loadSeeds = async () => {
-      const modules = import.meta.glob('./seeds/*.tsx');
-      const loadedSeeds: SeedData[] = [];
-      for (const path in modules) {
-        const mod = await modules[path]() as any;
-        if (mod.data) {
-          loadedSeeds.push(mod.data);
-        }
-      }
-      setSeeds(loadedSeeds);
-    };
-    loadSeeds();
-  }, []);
+  // Optimization: Eagerly load seed modules to eliminate async "pop-in" and multiple micro-tasks.
+  // Using import.meta.glob with { eager: true } allows for synchronous access to seed data.
+  const modules = import.meta.glob('./seeds/*.tsx', { eager: true });
+  const seeds = Object.values(modules)
+    .map((mod: any) => mod.data as SeedData)
+    .filter(Boolean);
 
   const cogniSeeds = seeds.filter(s => s.category === 'cogni');
   const linguaSeeds = seeds.filter(s => s.category === 'lingua');
