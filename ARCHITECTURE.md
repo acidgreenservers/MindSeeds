@@ -84,5 +84,6 @@ The project uses a "drop-in" component architecture:
 ## Known Constraints
 
 - **Static Content**: All seeds are currently defined in code.
-- **Manual Counts**: Seed counts on the HomePage (e.g., "24 in registry") are
-  currently hardcoded and must be updated manually.
+- **Manual Counts**: Seed counts on the HomePage (e.g., "24 in registry") and the
+  global total in the footer are currently hardcoded and must be updated
+  manually in `src/pages/Home/HomePage.tsx` when adding new seed files.

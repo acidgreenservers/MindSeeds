@@ -1,6 +1,6 @@
 # Quickstart ⚡
 
-This path gets you from **clone → running app** in under 60 seconds.
+This path gets you from **clone → running app** in under 90 seconds.
 
 ## Prerequisites
 
@@ -14,30 +14,26 @@ git clone https://github.com/acidgreenservers/MindSeeds.git
 cd MindSeeds
 ```
 
-## 2) Install Dependencies
+## 2) Install & Launch
 
 ```bash
 pnpm install
-```
-
-## 3) Launch Development Server
-
-```bash
 pnpm dev
 ```
 
-## 4) Access the Registry
+## 3) Access the Registry
 
 Open your browser to:
 
 - **App**: [http://localhost:5173](http://localhost:5173)
 
-## 5) Verify Build
+## 4) Verify Build
 
 Ensure the project is production-ready:
 
 ```bash
 pnpm build
+pnpm preview
 ```
 
 ---

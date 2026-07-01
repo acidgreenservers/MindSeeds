@@ -39,3 +39,19 @@ placeholder, but the legal source of truth is the `LICENSE` file.
 
 **Action:** Corrected `README.md` to accurately reflect AGPL-3.0 while
 preserving the philosophical context in the UI (until team clarifies).
+
+## 2026-07-01 - [CI/CD Alignment & Manual Counter Discovery]
+
+**Observation:** Found a discrepancy between documentation (recommending `pnpm`)
+and the actual CI/CD workflow in `.github/workflows/deploy.yml` (using `npm`).
+Also identified that seed counts and global totals in `HomePage.tsx` are
+hardcoded rather than derived.
+
+**Learning:** Keeping CI/CD in sync with the recommended developer experience is
+crucial for "minute-one" success. Hardcoded UI elements create a maintenance
+burden that must be explicitly documented to prevent stale UI state.
+
+**Action:** Updated `.github/workflows/deploy.yml` to use `pnpm` exclusively.
+Explicitly documented the manual counter update requirement in
+`ARCHITECTURE.md` and added a build-and-preview step to `README.md` and
+`QUICKSTART.md` to catch stale state early.

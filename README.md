@@ -1,4 +1,4 @@
-# MindSeeds 📘
+# MindSeeds <small>— Wisdom Distilled</small> 📘
 
 [![Deploy content](https://github.com/acidgreenservers/MindSeeds/actions/workflows/deploy.yml/badge.svg)](https://github.com/acidgreenservers/MindSeeds/actions/workflows/deploy.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
@@ -44,10 +44,11 @@ pnpm dev
 
 The app will be available at `http://localhost:5173`.
 
-### 4) Build for Production
+### 4) Build & Verify
 
 ```bash
 pnpm build
+pnpm preview
 ```
 
 Static assets will be generated in the `dist/` directory.
@@ -110,12 +111,16 @@ Contributions are welcome! Please ensure any new seeds follow the
 **Four Invariants**:
 
 <details>
-<summary>Click to expand: The Seed Schema</summary>
+<summary>Click to expand: The Seed Invariant Schema</summary>
 
-1. **Compression**: Under 12 words. High-density.
-2. **Generative**: Unfolds across different domains without modification.
-3. **Falsifiable**: Ignoring it produces a specific, visible failure.
-4. **Decompressible**: An LLM can expand it into a full reasoning chain.
+1.  **Compression**: Under 12 words. High-density. No decorative language or
+    qualifiers.
+2.  **Generative**: Unfolds differently across domains (Code, Writing, Design,
+    Reasoning) without modification.
+3.  **Falsifiable**: Ignoring it produces a specific, visible, and predictable
+    failure mode.
+4.  **Decompressible**: An LLM (or trained human) can expand it into a full
+    reasoning chain unprompted.
 
 </details>
 
