@@ -37,7 +37,10 @@ We aim to acknowledge reports within **48 hours**.
 - [ ] **Content Security Policy (CSP)**: Implement strict CSP headers via hosting
   provider (e.g., GitHub Pages headers or meta tags).
 - [x] **No Backend**: By design, the application has no backend to exploit.
+- [ ] **Subresource Integrity (SRI)**: Ensure all external scripts/styles use
+  SRI hashes (where applicable).
 
-## Contact
+## Contact & Keys
 
 - **Security Contact**: @acidgreenservers
+- **Response Target**: Acknowledge within **48 hours**.
