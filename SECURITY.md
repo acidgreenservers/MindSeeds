@@ -23,8 +23,8 @@ We aim to acknowledge reports within **48 hours**.
 
 - **No Secrets**: This is a static frontend project. No API keys, database
   credentials, or private secrets should ever be committed to the repository.
-- **Environment Variables**: Use `.env.example` to document required local
-  environment variables. Never commit the actual `.env` file.
+- **Environment Variables**: This project is a fully-static client-side React app
+  and does not require any custom environment variables or `.env` files to build.
 - **PII**: Avoid including any Personally Identifiable Information (PII) within
   the Seed registry.
 

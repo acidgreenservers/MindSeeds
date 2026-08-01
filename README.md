@@ -1,27 +1,25 @@
+<!-- markdownlint-disable MD033 MD013 -->
 # MindSeeds <small>— Wisdom Distilled</small> 📘
 
 [![Deploy content](https://github.com/acidgreenservers/MindSeeds/actions/workflows/deploy.yml/badge.svg)](https://github.com/acidgreenservers/MindSeeds/actions/workflows/deploy.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Node Version](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org/)
 
-Wisdom is not stored as documentation. It is distilled into **Seeds** —
-compressed, generative heuristics that unfold into full reasoning frameworks on
-contact with a problem.
+Wisdom is not stored as documentation. It is distilled into **Seeds** — compressed, generative heuristics that unfold into full reasoning frameworks on contact with a problem.
 
-MindSeeds is a registry of these heuristics across three domains: Reasoning
-(Cogni), Voice (Lingua), and Structure (Arch).
+MindSeeds is a registry of these heuristics across three domains: Reasoning (Cogni), Voice (Lingua), and Structure (Arch).
 
 ---
 
 ## 🚀 Getting Started
 
-> The commands below are verified for this repository. If your platform differs,
-> see **Troubleshooting**.
+> The commands below are verified for this repository. If your platform differs, see **Troubleshooting**.
 
 ### Prerequisites
 
-- **Node.js**: 20.x or higher
-- **Package Manager**: [pnpm](https://pnpm.io/) (10.x recommended)
+- **Node.js**: v20.x or higher
+- **Package Manager**: [pnpm](https://pnpm.io/) (v10.x recommended)
+- **Other Environments**: This repository is a purely static single-page application (SPA). There are no Python dependencies, Docker files, or backend services required.
 
 ### 1) Clone the Repository
 
@@ -57,31 +55,26 @@ Static assets will be generated in the `dist/` directory.
 
 ## 🏗️ Architecture
 
-MindSeeds is built for speed and clarity. It utilizes a "drop-in" component
-architecture where seeds are defined as individual modules and registered
-automatically.
+MindSeeds is built for speed and clarity. It utilizes a "drop-in" component architecture where seeds are defined as individual modules and registered automatically.
 
 - **Frontend**: React 19 + Vite
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Loading**: Eager module globbing for zero-latency UI
 
-For a deeper dive into the system design and the "Identity-Level Compression"
-philosophy, see **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
+For a deeper dive into the system design and the "Identity-Level Compression" philosophy, see **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
 ## 🧭 Quickstart
 
-If you want to get up and running in under 60 seconds, check out the
-**[QUICKSTART.md](./QUICKSTART.md)**.
+If you want to get up and running in under 60 seconds, check out the **[QUICKSTART.md](./QUICKSTART.md)**.
 
 ---
 
 ## ⚙️ Configuration
 
-The project is a standard Vite-based React SPA. Most configuration is handled
-via:
+The project is a standard Vite-based React SPA. Most configuration is handled via:
 
 - `vite.config.ts`: Build and server settings.
 - `tailwind.config.js`: Theme and color definitions (Cogni, Lingua, Arch).
@@ -93,41 +86,36 @@ via:
 
 Currently, the project focuses on visual and structural integrity.
 
-- **Build Check**: `pnpm build` verifies TypeScript and Vite compilation.
+- **Build Check**: `pnpm build` verifies TypeScript (`tsc`) and Vite compilation.
 - **Preview**: `pnpm preview` lets you test the production build locally.
+- **Linting Docs**: You can run `npx markdownlint-cli2 .` to lint all markdown files.
 
 ---
 
 ## 🔒 Security
 
-We follow a "Zero Backend" security model. For reporting vulnerabilities or
-understanding our security posture, see **[SECURITY.md](./SECURITY.md)**.
+We follow a "Zero Backend" security model. For reporting vulnerabilities or understanding our security posture, see **[SECURITY.md](./SECURITY.md)**.
 
 ---
 
 ## 🧩 Contributing
 
-Contributions are welcome! Please ensure any new seeds follow the
-**Four Invariants**:
+Contributions are welcome! Please ensure any new seeds follow the **Four Invariants**:
 
 <details>
 <summary>Click to expand: The Seed Invariant Schema</summary>
 
-1.  **Compression**: Under 12 words. High-density. No decorative language or
-    qualifiers.
-2.  **Generative**: Unfolds differently across domains (Code, Writing, Design,
-    Reasoning) without modification.
-3.  **Falsifiable**: Ignoring it produces a specific, visible, and predictable
-    failure mode.
-4.  **Decompressible**: An LLM (or trained human) can expand it into a full
-    reasoning chain unprompted.
+1. **Compression**: Under 12 words. High-density. No decorative language or qualifiers.
+2. **Generative**: Unfolds differently across domains (Code, Writing, Design, Reasoning) without modification.
+3. **Falsifiable**: Ignoring it produces a specific, visible, and predictable failure mode.
+4. **Decompressible**: An LLM (or trained human) can expand it into a full reasoning chain unprompted.
 
 </details>
 
 ### Branching & PRs
 
 - Create a feature branch for your changes.
-- Ensure `pnpm build` passes.
+- Ensure `pnpm build` passes cleanly.
 - Submit a PR with a clear description of the new seed or improvement.
 
 ---
@@ -135,12 +123,10 @@ Contributions are welcome! Please ensure any new seeds follow the
 ## 🆘 Troubleshooting
 
 - **Port Conflict**: If `5173` is taken, Vite will try the next available port.
-- **pnpm vs npm**: This project is optimized for `pnpm`. If you use `npm`, ensure
-  you delete `pnpm-lock.yaml` to avoid conflicts.
+- **pnpm vs npm**: This project is optimized for `pnpm`. If you use `npm`, ensure you delete `pnpm-lock.yaml` to avoid conflicts.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **GNU Affero General Public License v3.0**.
-See [LICENSE](./LICENSE) for details.
+This project is licensed under the **GNU Affero General Public License v3.0**. See [LICENSE](./LICENSE) for details.
