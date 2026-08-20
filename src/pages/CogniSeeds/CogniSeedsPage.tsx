@@ -3,6 +3,7 @@ import { Layout, Footer } from '@/components/shared/Layout';
 import { Seed } from '@/components/shared/Seed';
 import { SeedData } from '@/types';
 import { Link } from 'react-router-dom';
+import { Home } from 'lucide-react';
 
 const CogniSeedsPage: React.FC = () => {
   // Optimization: Eagerly load seed modules for synchronous access.
@@ -15,7 +16,14 @@ const CogniSeedsPage: React.FC = () => {
     <Layout>
       <div className="animate-fade-up">
         <header className="py-20 border-b border-border relative">
-          <div className="flex gap-2 mb-8 flex-wrap">
+          <div className="flex gap-2 mb-8 flex-wrap items-center">
+            <Link
+              to="/"
+              className="p-1.5 rounded-full border border-border text-ink-dim hover:text-cogni hover:border-cogni-dim transition-colors cursor-pointer flex items-center justify-center mr-2"
+              aria-label="Home"
+            >
+              <Home size={14} />
+            </Link>
             <Link to="/cogni" className="font-mono text-[0.6rem] tracking-widest px-3 py-1 rounded-full border border-cogni/30 text-cogni bg-cogni/10">CogniSeeds · Reasoning</Link>
             <Link to="/lingua" className="font-mono text-[0.6rem] tracking-widest px-3 py-1 rounded-full border border-border text-ink-dim hover:text-cogni hover:border-cogni-dim transition-colors">LinguaSeeds · Voice</Link>
             <Link to="/arch" className="font-mono text-[0.6rem] tracking-widest px-3 py-1 rounded-full border border-border text-ink-dim hover:text-cogni hover:border-cogni-dim transition-colors">ArchSeeds · Structure</Link>
