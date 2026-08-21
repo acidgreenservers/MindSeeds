@@ -129,7 +129,7 @@ const HomePage: React.FC = () => {
               ))}
             </div>
             <div className="flex gap-8 flex-wrap">
-              <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Seeds <span className="text-ink-mid">35 in registry</span></div>
+              <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Seeds <span className="text-ink-mid">36 in registry</span></div>
               <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Domain <span className="text-ink-mid">Systems · Architecture · Engineering</span></div>
               <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Status <span className="text-ink-mid">v1.0 · Active</span></div>
             </div>
@@ -231,7 +231,7 @@ const HomePage: React.FC = () => {
             Public Domain · v1.0
           </div>
           <div className="flex gap-4">
-            <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">65 Seeds</span>
+            <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">66 Seeds</span>
             <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">3 Families</span>
             <span className="px-3 py-1 rounded-full border border-border bg-surface/50 text-ink-mid">1 Schema</span>
           </div>

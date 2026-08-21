@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
         Public Domain · v1.0
       </div>
       <div className="flex gap-1.5">
-        <span className="font-mono text-[0.58rem] tracking-widest px-2.5 py-1 rounded-full border border-border text-ink-dim">65 Seeds</span>
+        <span className="font-mono text-[0.58rem] tracking-widest px-2.5 py-1 rounded-full border border-border text-ink-dim">66 Seeds</span>
         <span className="font-mono text-[0.58rem] tracking-widest px-2.5 py-1 rounded-full border border-border text-ink-dim">3 Families</span>
         <span className="font-mono text-[0.58rem] tracking-widest px-2.5 py-1 rounded-full border border-border text-ink-dim">1 Schema</span>
       </div>
