@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Scribe's Journal 🗒️
 
 Critical learnings and architectural insights discovered during documentation
@@ -55,3 +56,11 @@ burden that must be explicitly documented to prevent stale UI state.
 Explicitly documented the manual counter update requirement in
 `ARCHITECTURE.md` and added a build-and-preview step to `README.md` and
 `QUICKSTART.md` to catch stale state early.
+
+## 2026-08-01 - [Full Documentation Audit and Standard Alignment]
+
+**Observation:** Found that while the codebase is extremely clean and static, the documentation contained some minor markdown linter formatting issues (list markers, inline HTML usage) and misleading references to `.env.example`.
+
+**Learning:** Static frontend SPAs without a backend have highly predictable environments, but generic templates can lead developers to assume there are required env variables or complex server-side elements. Providing a precise, zero-env explanation prevents developer friction. Similarly, integrating standard linters (like `markdownlint-cli2`) ensures that as documentation grows, it maintains full stylistic compliance.
+
+**Action:** Audited and rewrote `README.md`, `SECURITY.md`, and `ARCHITECTURE.md` to completely remove generic template assumptions, added a detailed directory map, and enabled `markdownlint-cli2` directives so the whole documentation suite compiles with zero lint errors.

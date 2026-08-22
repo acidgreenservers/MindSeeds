@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Architecture 🧱
 
 > **Goal:** Provide a fast mental model—components, boundaries, and critical
@@ -71,6 +72,38 @@ The project uses a "drop-in" component architecture:
 3. **Synchronous Rendering**: By using eager loading, the UI renders the full
    registry immediately without "pop-in" or loading states.
 
+## Directory Structure
+
+Here is how the codebase is organized:
+
+```text
+src/
+├── components/          # Shared layout and UI components
+│   └── shared/
+│       ├── Layout.tsx   # Common page container & Navigation header/footer
+│       ├── Seed.tsx     # Handles pill/card rendering of individual seeds
+│       └── ThemeToggle.ts # Persistent Dark/Light theme mode controller
+├── hooks/               # Custom React hooks
+├── types/               # Type definitions (e.g., SeedData schema)
+│   └── index.ts
+├── pages/               # Main route views
+│   ├── Home/
+│   │   ├── seeds/       # Aggregate directory containing duplicates of all seeds
+│   │   └── HomePage.tsx # Core landing page
+│   ├── CogniSeeds/
+│   │   ├── seeds/       # Cognitive reasoning seeds
+│   │   └── CogniSeedsPage.tsx
+│   ├── LinguaSeeds/
+│   │   ├── seeds/       # Linguistic friction seeds
+│   │   └── LinguaSeedsPage.tsx
+│   └── ArchSeeds/
+│       ├── seeds/       # Systems & architecture seeds
+│       └── ArchSeedsPage.tsx
+├── App.tsx              # Main routing and global state configurations
+├── index.css            # Stylesheets, design variables and Tailwind imports
+└── main.tsx             # Application mount point
+```
+
 ## Key Decisions
 
 - **React 19**: Utilizing the latest React features for future-proofing and
@@ -80,10 +113,16 @@ The project uses a "drop-in" component architecture:
   bundles.
 - **SPA Architecture**: Navigated via `react-router-dom` for a seamless
   application feel.
+- **Base Paths & GH Pages**: Vite is configured via `base` and React Router uses
+  `basename={import.meta.env.BASE_URL}` to support hosting under subpaths like
+  `/MindSeeds/` automatically.
 
 ## Known Constraints
 
 - **Static Content**: All seeds are currently defined in code.
-- **Manual Counts**: Seed counts on the HomePage (e.g., "24 in registry") and the
+- **Manual Counts**: Seed counts on the HomePage (e.g., "22 in registry", "8 in registry", "30 in registry") and the
   global total in the footer are currently hardcoded and must be updated
   manually in `src/pages/Home/HomePage.tsx` when adding new seed files.
+- **Seed Duplication Requirement**: To integrate a new seed, you must place the `.tsx` component file in two directories:
+  1. The category-specific folder (e.g. `src/pages/ArchSeeds/seeds/`)
+  2. The aggregate folder on the landing page (`src/pages/Home/seeds/`)
