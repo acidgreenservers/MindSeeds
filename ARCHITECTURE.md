@@ -120,8 +120,8 @@ src/
 ## Known Constraints
 
 - **Static Content**: All seeds are currently defined in code.
-- **Manual Counts**: Seed counts on the HomePage (e.g., "22 in registry", "8 in registry", "30 in registry") and the
-  global total in the footer are currently hardcoded and must be updated
+- **Manual Counts**: Seed counts on the HomePage (e.g., "15 in registry", "8 in registry", "35 in registry") and the
+  global total in the footer ("58 Seeds") are currently hardcoded and must be updated
   manually in `src/pages/Home/HomePage.tsx` when adding new seed files.
 - **Seed Duplication Requirement**: To integrate a new seed, you must place the `.tsx` component file in two directories:
   1. The category-specific folder (e.g. `src/pages/ArchSeeds/seeds/`)
