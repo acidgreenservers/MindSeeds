@@ -64,3 +64,11 @@ Explicitly documented the manual counter update requirement in
 **Learning:** Static frontend SPAs without a backend have highly predictable environments, but generic templates can lead developers to assume there are required env variables or complex server-side elements. Providing a precise, zero-env explanation prevents developer friction. Similarly, integrating standard linters (like `markdownlint-cli2`) ensures that as documentation grows, it maintains full stylistic compliance.
 
 **Action:** Audited and rewrote `README.md`, `SECURITY.md`, and `ARCHITECTURE.md` to completely remove generic template assumptions, added a detailed directory map, and enabled `markdownlint-cli2` directives so the whole documentation suite compiles with zero lint errors.
+
+## 2026-09-01 - [Seed Registry Count Reconciliation Pass]
+
+**Observation:** Discovered that hardcoded seed counts on `HomePage.tsx` (22 CogniSeeds, 8 LinguaSeeds, 36 ArchSeeds, 66 Total) had drifted from the actual seed file count (15 CogniSeeds, 8 LinguaSeeds, 35 ArchSeeds, 58 Total).
+
+**Learning:** Hardcoded counters in UI views easily drift when seed files are added or restructured. Documenting these constraints in `ARCHITECTURE.md` and keeping them synchronized during documentation passes prevents user confusion.
+
+**Action:** Updated `HomePage.tsx` counter badges and footer numbers to match actual registry counts (15 CogniSeeds, 8 LinguaSeeds, 35 ArchSeeds, 58 Total Seeds). Updated `ARCHITECTURE.md` to explicitly state these verified numbers.
