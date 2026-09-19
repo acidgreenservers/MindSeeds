@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
               ))}
             </div>
             <div className="flex gap-8 flex-wrap">
-              <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Seeds <span className="text-ink-mid">22 in registry</span></div>
+              <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Seeds <span className="text-ink-mid">15 in registry</span></div>
               <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Domain <span className="text-ink-mid">Reasoning · Epistemology · Decision</span></div>
               <div className="font-mono text-[0.65rem] tracking-wide text-ink-dim uppercase">Status <span className="text-ink-mid">v1.0 · Active</span></div>
             </div>
